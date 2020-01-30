@@ -1578,8 +1578,8 @@ function init_daterangepicker() {
     var optionSet1 = {
         startDate: moment().subtract(29, 'days'),
         endDate: moment(),
-        minDate: '01/01/2012',
-        maxDate: '12/31/2015',
+        minDate: '01/01/2019',
+        maxDate: '12/31/' + moment().year(),
         dateLimit: {
             days: 60
         },
@@ -1589,12 +1589,12 @@ function init_daterangepicker() {
         timePickerIncrement: 1,
         timePicker12Hour: true,
         ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            'Hoy': [moment(), moment()],
+            'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Últimos 7 Días': [moment().subtract(6, 'days'), moment()],
+            'Últimos 30 Días': [moment().subtract(29, 'days'), moment()],
+            'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+            'Mes Pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         },
         opens: 'left',
         buttonClasses: ['btn btn-default'],
@@ -1603,18 +1603,47 @@ function init_daterangepicker() {
         format: 'MM/DD/YYYY',
         separator: ' to ',
         locale: {
-            applyLabel: 'Submit',
-            cancelLabel: 'Clear',
-            fromLabel: 'From',
-            toLabel: 'To',
-            customRangeLabel: 'Custom',
-            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            applyLabel: 'Enviar',
+            cancelLabel: 'Cerrar',
+            fromLabel: 'Desde',
+            toLabel: 'Hasta',
+            customRangeLabel: 'Elegir',
+            daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
             firstDay: 1
         }
     };
 
-    $('#reportrange span').html(moment().subtract(29, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+    function reemp_Mes(fecha){
+        
+            if(fecha.includes('January'))
+                return fecha.replace('January','Enero');
+            if(fecha.includes('February'))
+                return fecha.replace('February','Febrero');
+            if(fecha.includes('March'))
+                return fecha.replace('March','Marzo');
+            if(fecha.includes('April'))
+                return fecha.replace('April','Abril');
+            if(fecha.includes('May'))
+                return fecha.replace('May','Mayo');
+            if(fecha.includes('June'))
+                return fecha.replace('June','Junio') 
+            if(fecha.includes('July'))
+                return fecha.replace('July','Julio'); 
+            if(fecha.includes('August'))
+                return fecha.replace('August','Agosto'); 
+            if(fecha.includes('September'))
+                return fecha.replace('September','Septiembre'); 
+            if(fecha.includes('October'))
+                return fecha.replace('October', 'Octubre');
+            if(fecha.includes('November'))
+                return fecha.replace('November','Noviembre'); 
+            if(fecha.includes('December'))
+                return fecha.replace('December','Diciembre');  
+        
+    }
+
+    $('#reportrange span').html(reemp_Mes(moment().lang('es').subtract(29, 'days').format('MMMM D, YYYY')) + ' - ' + reemp_Mes(moment().lang('es').format('MMMM D, YYYY')));
     $('#reportrange').daterangepicker(optionSet1, cb);
     $('#reportrange').on('show.daterangepicker', function () {
         console.log("show event fired");
@@ -1630,9 +1659,11 @@ function init_daterangepicker() {
     });
     $('#options1').click(function () {
         $('#reportrange').data('daterangepicker').setOptions(optionSet1, cb);
+        console.log("Options1");
     });
     $('#options2').click(function () {
         $('#reportrange').data('daterangepicker').setOptions(optionSet2, cb);
+        console.log("Options2");
     });
     $('#destroy').click(function () {
         $('#reportrange').data('daterangepicker').remove();
@@ -1653,8 +1684,8 @@ function init_daterangepicker_right() {
     var optionSet1 = {
         startDate: moment().subtract(29, 'days'),
         endDate: moment(),
-        minDate: '01/01/2012',
-        maxDate: '12/31/2020',
+        minDate: '01/01/2019',
+        maxDate: '12/31/' + moment().year(),
         dateLimit: {
             days: 60
         },
@@ -1664,12 +1695,12 @@ function init_daterangepicker_right() {
         timePickerIncrement: 1,
         timePicker12Hour: true,
         ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            'Hoy': [moment(), moment()],
+            'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Últimos 7 Días': [moment().subtract(6, 'days'), moment()],
+            'Últimos 30 Días': [moment().subtract(29, 'days'), moment()],
+            'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+            'Mes Pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         },
         opens: 'right',
         buttonClasses: ['btn btn-default'],
@@ -1678,13 +1709,13 @@ function init_daterangepicker_right() {
         format: 'MM/DD/YYYY',
         separator: ' to ',
         locale: {
-            applyLabel: 'Submit',
-            cancelLabel: 'Clear',
-            fromLabel: 'From',
-            toLabel: 'To',
-            customRangeLabel: 'Custom',
-            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            applyLabel: 'Enviar',
+            cancelLabel: 'Cerrar',
+            fromLabel: 'Desde',
+            toLabel: 'Hasta',
+            customRangeLabel: 'Elegir',
+            daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
             firstDay: 1
         }
     };
@@ -1976,7 +2007,7 @@ function init_charts() {
         var canvas_line_00 = new Chart(document.getElementById("canvas_line"), {
             type: 'line',
             data: {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"],
                 datasets: [{
                     label: "My First dataset",
                     backgroundColor: "rgba(38, 185, 154, 0.31)",
@@ -2009,7 +2040,7 @@ function init_charts() {
         var canvas_line_01 = new Chart(document.getElementById("canvas_line1"), {
             type: 'line',
             data: {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"],
                 datasets: [{
                     label: "My First dataset",
                     backgroundColor: "rgba(38, 185, 154, 0.31)",
@@ -2042,7 +2073,7 @@ function init_charts() {
         var canvas_line_02 = new Chart(document.getElementById("canvas_line2"), {
             type: 'line',
             data: {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"],
                 datasets: [{
                     label: "My First dataset",
                     backgroundColor: "rgba(38, 185, 154, 0.31)",
@@ -2075,7 +2106,7 @@ function init_charts() {
         var canvas_line_03 = new Chart(document.getElementById("canvas_line3"), {
             type: 'line',
             data: {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"],
                 datasets: [{
                     label: "My First dataset",
                     backgroundColor: "rgba(38, 185, 154, 0.31)",
@@ -2108,7 +2139,7 @@ function init_charts() {
         var canvas_line_04 = new Chart(document.getElementById("canvas_line4"), {
             type: 'line',
             data: {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"],
                 datasets: [{
                     label: "My First dataset",
                     backgroundColor: "rgba(38, 185, 154, 0.31)",
@@ -2144,7 +2175,7 @@ function init_charts() {
         var lineChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"],
                 datasets: [{
                     label: "My First dataset",
                     backgroundColor: "rgba(38, 185, 154, 0.31)",
@@ -2179,7 +2210,7 @@ function init_charts() {
         var mybarChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"],
                 datasets: [{
                     label: '# of Votes',
                     backgroundColor: "#26B99A",
