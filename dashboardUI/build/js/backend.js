@@ -8,8 +8,9 @@ $(document).ready(function(){
         contentType: "application/json",
         dataType: 'json',
         success: function(result){
-            console.log(jQuery.parseJSON(result.body));
-
+            var data = JSON.parse(result.body);
+            console.log(data); 
+            console.log(data.ordersByStat.length);            
         }
     })
 });
