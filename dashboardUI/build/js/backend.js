@@ -1,5 +1,6 @@
 $(document).ready(function(){
     //init_chart_doughnut();
+
     pickDateBackend(moment().format("YYYY-MM-DD"), moment().format("YYYY-MM-DD"), 0)
 });
 
@@ -41,6 +42,7 @@ function pickDateBackend(startdate, enddate, source){
             //Charts
 
             //Tables
+            //TableDropOff.drop();
             fillTables(data);
             
             //Tables
@@ -210,7 +212,7 @@ function fillTipoPago(data){
     if(data.ordersByPay != 'undefined' && data.ordersByPay != null){
         if(data.ordersByPay.length >0){
             for(var i = 0; i < data.ordersByPay.length; i++){
-                labelsArr.push(data.ordersByPay[i].paymentType);
+                labelsArr.push(data.ordersByPay[i].paymentType.replace('Pago en Efectivo','Efectivo'));
                 dataArr.push(data.ordersByPay[i].ordersNumber);
                 totalOrden += Number(data.ordersByPay[i].ordersNumber);
             }
@@ -280,6 +282,8 @@ function fillTables(data){
         //console.log(tableHeader+tableBody);
         $('#datatable-buttons_').html(tableHeader + tableBody);
         
+        $("#datatable-buttons_").DataTable({}).destroy();
+
         var handleDataTableButtons = function () {
             if ($("#datatable-buttons_").length) {
                 $("#datatable-buttons_").DataTable({
@@ -319,9 +323,9 @@ function fillTables(data){
                 }
             };
         }();
+
         
         TableManageButtons.init();
-        
         
     }
     //$.getScript("../build/js/custom.min.js", function(data, textStatus, jqxhr){
@@ -329,6 +333,24 @@ function fillTables(data){
     //});
     
 }
+
+var dropTable = function(){
+    if ($("#datatable-buttons_").length) {
+        $("#datatable-buttons_").DataTable({}).destroy();
+    }
+
+} 
+
+TableDropOff = function(){
+    "use strict";
+    return{
+        drop: function(){
+            dropTable();
+        }
+    }
+}();
+
+
 
 function reemp_Mes_(fecha){
         
@@ -371,7 +393,7 @@ function formatNumber(num){
 
 var theme = {
     color: [
-        '#26B99A', '#34495E', '#BDC3C7', '#3498DB',
+        '#26B99A', '#34495E', '#E6776C', '#3498DB',
         '#9B59B6', '#8abb6f', '#759c6a', '#bfd3b7'
     ],
 
