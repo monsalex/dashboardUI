@@ -2266,7 +2266,7 @@ span.right {
 
 .tile_count .tile_stats_count {
   border-bottom: 1px solid #D9DEE4;
-  padding: 0 10px 0 20px;
+  padding: 0 0 0 0;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -2301,7 +2301,7 @@ span.right {
 
 @media (min-width: 768px) {
   .tile_count .tile_stats_count .count {
-    font-size: 40px; } }
+    font-size: 35px; } }
 
 @media (min-width: 992px) and (max-width: 1100px) {
   .tile_count .tile_stats_count .count {
