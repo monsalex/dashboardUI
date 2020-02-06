@@ -1571,8 +1571,8 @@ function init_daterangepicker() {
     console.log('init_daterangepicker');
 
     var cb = function (start, end, label) {
-        console.log(start.toISOString(), end.toISOString(), label);
-        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        //console.log(start.toISOString(), end.toISOString(), label);
+        $('#reportrange span').html(reemp_Mes(start.format('MMMM D, YYYY')) + ' - ' + reemp_Mes(end.format('MMMM D, YYYY')));
     };
 
     var optionSet1 = {
@@ -1646,13 +1646,14 @@ function init_daterangepicker() {
     $('#reportrange span').html(reemp_Mes(moment().lang('es').subtract(29, 'days').format('MMMM D, YYYY')) + ' - ' + reemp_Mes(moment().lang('es').format('MMMM D, YYYY')));
     $('#reportrange').daterangepicker(optionSet1, cb);
     $('#reportrange').on('show.daterangepicker', function () {
-        console.log("show event fired");
+        console.log("show event fired 1");
     });
     $('#reportrange').on('hide.daterangepicker', function () {
         console.log("hide event fired");
     });
     $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
-        console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
+        console.log("apply event fired 1, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
+        pickDateBackend(picker.startDate, picker.endDate);
     });
     $('#reportrange').on('cancel.daterangepicker', function (ev, picker) {
         console.log("cancel event fired");
@@ -1725,7 +1726,7 @@ function init_daterangepicker_right() {
     $('#reportrange_right').daterangepicker(optionSet1, cb);
 
     $('#reportrange_right').on('show.daterangepicker', function () {
-        console.log("show event fired");
+        console.log("show event fired 2");
     });
     $('#reportrange_right').on('hide.daterangepicker', function () {
         console.log("hide event fired");
@@ -5057,7 +5058,7 @@ $(document).ready(function () {
     init_select2();
     init_validator();
     init_DataTables();
-    init_chart_doughnut();
+    //init_chart_doughnut();
     init_gauge();
     init_PNotify();
     init_starrr();
