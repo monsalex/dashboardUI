@@ -54,6 +54,9 @@ function pickDateBackend(startdate, enddate, source){
             //TipoPago
             fillTipoPago(data);
             //TIpoPago
+
+            //Monto por status
+            fillMontoStatus(data);
         }
     })
 }
@@ -221,10 +224,17 @@ function fillTipoPago(data){
                 table +='<tr><td><p><i class="fa fa-square '+ colorsRow[i] +'"></i>'+labelsArr[i]+' </p></td><td>'+Math.round(((data.ordersByPay[i].ordersNumber/totalOrden)*100))+'%</td></tr>';
             }
 
-            $('.tile_info').html(table);
+            
 
         }
+    }else{
+        labelsArr.push('No registrado.');
+        dataArr.push(1);
+        totalOrden += 1;
+        table +='<tr><td><p><i class="fa fa-square '+ colorsRow[0] +'"></i>'+labelsArr[0]+' </p></td><td>'+Math.round(((dataArr[0]/totalOrden)*100))+'%</td></tr>';
     }
+
+    $('.tile_info').html(table);
 
     var chart_doughnut_settings = {
         type: 'doughnut',
@@ -262,6 +272,104 @@ function fillTipoPago(data){
 
     });
     
+}
+
+function fillMontoStatus(data){
+    var divStatusOrdenes = '';
+    var divStatusNumOrdenes = ''
+    var divEach ='';
+    var montoTotal = 0;
+    var ordersTotal = 0;
+    if(data.amountByStat != 'undefined' && data.amountByStat != 'null'){
+        for(var i=0; i < data.amountByStat.length; i++){
+            montoTotal += Number(data.amountByStat[i].amounSatus);
+        }
+        //console.log(montoTotal);
+
+        for(var i=0; i < data.amountByStat.length; i++){
+            divEach = '';
+            divEach += '<div class="widget_summary">';
+            divEach += '<div class="w_left w_25">';
+            divEach += '<span>'+cambiarNombreStatus(data.amountByStat[i].statusVtex)[0]+'</span>';
+            divEach += '</div>';
+            divEach += '<div class="w_center w_55">';
+            divEach += '<div class="progress">';
+            divEach += '<div class="progress-bar bg-'+cambiarNombreStatus(data.amountByStat[i].statusVtex)[1]+'" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: '+Math.round((data.amountByStat[i].amounSatus/montoTotal)*100)+'%;">';
+            divEach += '<span class="sr-only">60% Complete</span>';
+            divEach += '</div>';
+            divEach += '</div>';
+            divEach += '</div>';
+            divEach += '<div class="w_right w_20">';
+            divEach += '<span>'+ formatNumber(data.amountByStat[i].amounSatus)+'</span>';
+            divEach += '</div>';
+            divEach += '<div class="clearfix"></div>';
+            divEach += '</div>';
+
+            divStatusOrdenes += divEach;
+        }
+        //console.log(divStatusOrdenes);
+        $("#divMontoStatusOrdenes").html(divStatusOrdenes);
+
+    }
+
+    if(data.ordersByStat != 'undefined' && data.ordersByStat != 'null'){
+        for(var i=0; i < data.ordersByStat.length; i++){
+            ordersTotal += Number(data.ordersByStat[i].ordersNumber);
+        }
+        //console.log(ordersTotal);
+
+        for(var i=0; i < data.ordersByStat.length; i++){
+            divEach = '';
+            divEach += '<div class="widget_summary">';
+            divEach += '<div class="w_left w_25">';
+            divEach += '<span>'+cambiarNombreStatus(data.ordersByStat[i].statusVtex)[0]+'</span>';
+            divEach += '</div>';
+            divEach += '<div class="w_center w_55">';
+            divEach += '<div class="progress">';
+            divEach += '<div class="progress-bar bg-'+cambiarNombreStatus(data.ordersByStat[i].statusVtex)[1]+'" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: '+Math.round((data.ordersByStat[i].ordersNumber/ordersTotal)*100)+'%;">';
+            divEach += '<span class="sr-only">60% Complete</span>';
+            divEach += '</div>';
+            divEach += '</div>';
+            divEach += '</div>';
+            divEach += '<div class="w_right w_20">';
+            divEach += '<span>'+ new Intl.NumberFormat('en-US').format(data.ordersByStat[i].ordersNumber)+'</span>';
+            divEach += '</div>';
+            divEach += '<div class="clearfix"></div>';
+            divEach += '</div>';
+
+            divStatusNumOrdenes += divEach;
+        }
+        //console.log(divStatusOrdenes);
+        $("#divStatusNumOrdenes").html(divStatusNumOrdenes);
+
+    }
+} 
+
+function cambiarNombreStatus(statusName){
+    switch(statusName){
+        case 'cancel':
+            return ['En cancelación', 'red'];
+        case 'canceled':
+            return ['Canceladas', 'red'];
+        case 'invoice':
+            return ['Facturadas', 'green'];
+        case 'on-order-completed':
+            return ['Orden completa', 'green'];
+        case 'on-order-completed-ffm':
+            return ['Orden completa en FC', 'green'];
+        case 'order-accepted':
+            return ['Orden aceptada', 'green'];
+        case 'order-created':
+            return ['Orden creada', 'green'];
+        case 'ready-for-handling':
+            return ['Previo picking', 'blue'];
+        case 'waiting-ffmt-authorization':
+            return ['En autorización por FC', 'green'];
+        case 'handling':
+            return ['En picking','blue']
+        default:
+            return ['Otro', 'grey'];
+    }
 }
 
 function fillTables(data){
@@ -386,7 +494,7 @@ function formatNumber(num){
     const formatter = new Intl.NumberFormat('en-US',{
         style: 'currency',
         currency: 'USD',
-        minimumFractionDigits: 2
+        minimumFractionDigits: 0
     });
     return formatter.format(num);
 }
