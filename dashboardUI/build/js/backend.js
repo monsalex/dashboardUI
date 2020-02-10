@@ -347,6 +347,8 @@ function fillMontoStatus(data){
 
 function cambiarNombreStatus(statusName){
     switch(statusName){
+        case 'approve-payment':
+            return ['Pago confirmado','green'];
         case 'cancel':
             return ['En cancelación', 'red'];
         case 'canceled':
