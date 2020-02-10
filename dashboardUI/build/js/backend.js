@@ -292,14 +292,14 @@ function fillMontoStatus(data){
             divEach += '<div class="w_left w_25">';
             divEach += '<span>'+cambiarNombreStatus(data.amountByStat[i].statusVtex)[0]+'</span>';
             divEach += '</div>';
-            divEach += '<div class="w_center w_55">';
+            divEach += '<div class="w_center w_50">';
             divEach += '<div class="progress">';
             divEach += '<div class="progress-bar bg-'+cambiarNombreStatus(data.amountByStat[i].statusVtex)[1]+'" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: '+Math.round((data.amountByStat[i].amounSatus/montoTotal)*100)+'%;">';
             divEach += '<span class="sr-only">60% Complete</span>';
             divEach += '</div>';
             divEach += '</div>';
             divEach += '</div>';
-            divEach += '<div class="w_right w_20">';
+            divEach += '<div class="w_right w_25">';
             divEach += '<span>'+ formatNumber(data.amountByStat[i].amounSatus)+'</span>';
             divEach += '</div>';
             divEach += '<div class="clearfix"></div>';
@@ -352,6 +352,8 @@ function cambiarNombreStatus(statusName){
         case 'canceled':
             return ['Canceladas', 'red'];
         case 'invoice':
+            return ['En Facturación', 'green'];
+        case 'invoiced':
             return ['Facturadas', 'green'];
         case 'on-order-completed':
             return ['Orden completa', 'green'];
@@ -365,8 +367,14 @@ function cambiarNombreStatus(statusName){
             return ['Previo picking', 'blue'];
         case 'waiting-ffmt-authorization':
             return ['En autorización por FC', 'green'];
+        case 'start-handling':
+            return ['Iniciando Picking','blue'];
         case 'handling':
-            return ['En picking','blue']
+            return ['En picking','blue'];
+        case 'payment-pending':
+            return ['Pago pendiente', 'orange'];
+        case 'window-to-cancel':
+            return ['Ventana de Cancelación','orange'];
         default:
             return ['Otro', 'grey'];
     }
