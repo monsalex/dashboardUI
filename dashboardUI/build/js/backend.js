@@ -1,7 +1,13 @@
 $(document).ready(function(){
     //init_chart_doughnut();
 
-    pickDateBackend(moment().format("YYYY-MM-DD"), moment().format("YYYY-MM-DD"), 0)
+    pickDateBackend(moment().format("YYYY-MM-DD"), moment().format("YYYY-MM-DD"), 0);
+
+    $(".iHiddeShow").click(function(){
+        $(this).toggleClass("fa-plus-circle fa-close");
+        
+        $("#divBelow").toggle();
+    });
 });
 
 function pickDateBackend(startdate, enddate, source){
@@ -44,6 +50,7 @@ function pickDateBackend(startdate, enddate, source){
             //Tables
             //TableDropOff.drop();
             fillTables(data);
+            fillReporteSemanas(data);
             
             //Tables
 
@@ -629,10 +636,54 @@ function fillTables(data){
         TableManageButtons.init();
         
     }
-    //$.getScript("../build/js/custom.min.js", function(data, textStatus, jqxhr){
-        //console.log(jqxhr.status);
-    //});
     
+}
+
+function fillReporteSemanas(data){
+    $("#datatable-buttons_semanas").DataTable({}).destroy();
+
+    var handleDataTableButtons = function () {
+        if ($("#datatable-buttons_semanas").length) {
+            $("#datatable-buttons_semanas").DataTable({
+                dom: "Blfrtip",
+                buttons: [
+                    {
+                        extend: "copy",
+                        className: "btn-sm"
+                    },
+                    {
+                        extend: "csv",
+                        className: "btn-sm"
+                    },
+                    {
+                        extend: "excel",
+                        className: "btn-sm"
+                    },
+                    {
+                        extend: "pdfHtml5",
+                        className: "btn-sm"
+                    },
+                    {
+                        extend: "print",
+                        className: "btn-sm"
+                    },
+                ],
+                responsive: true
+            });
+        }
+    };
+
+    TableManageButtons = function () {
+        "use strict";
+        return {
+            init: function () {
+                handleDataTableButtons();
+            }
+        };
+    }();
+
+    
+    TableManageButtons.init();
 }
 
 var dropTable = function(){
@@ -956,3 +1007,4 @@ function init_chart_doughnut() {
     }
 
 }
+
