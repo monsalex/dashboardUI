@@ -280,32 +280,49 @@ function fillMontoStatus(data){
     var divEach ='';
     var montoTotal = 0;
     var ordersTotal = 0;
+    var arrAmount = [];
+    var arrOrders = [];
+
     if(data.amountByStat != 'undefined' && data.amountByStat != 'null'){
         for(var i=0; i < data.amountByStat.length; i++){
-            montoTotal += Number(data.amountByStat[i].amounSatus);
+            if(data.amountByStat[i].statusVtex == 'approve-payment' || data.amountByStat[i].statusVtex == 'cancel'
+                || data.amountByStat[i].statusVtex == 'canceled' || data.amountByStat[i].statusVtex == 'invoice'
+                || data.amountByStat[i].statusVtex == 'invoiced' || data.amountByStat[i].statusVtex == 'order-created'
+                || data.amountByStat[i].statusVtex == 'ready-for-handling' || data.amountByStat[i].statusVtex == 'start-handling'
+                || data.amountByStat[i].statusVtex == 'handling' || data.amountByStat[i].statusVtex == 'payment-pending'){
+                    montoTotal += Number(data.amountByStat[i].amounSatus);
+                    //console.log(data.amountByStat[i].statusVtex)
+
+            }
         }
-        //console.log(montoTotal);
+        console.log(arrAmount);
 
         for(var i=0; i < data.amountByStat.length; i++){
-            divEach = '';
-            divEach += '<div class="widget_summary">';
-            divEach += '<div class="w_left w_25">';
-            divEach += '<span>'+cambiarNombreStatus(data.amountByStat[i].statusVtex)[0]+'</span>';
-            divEach += '</div>';
-            divEach += '<div class="w_center w_50">';
-            divEach += '<div class="progress">';
-            divEach += '<div class="progress-bar bg-'+cambiarNombreStatus(data.amountByStat[i].statusVtex)[1]+'" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: '+Math.round((data.amountByStat[i].amounSatus/montoTotal)*100)+'%;">';
-            divEach += '<span class="sr-only">60% Complete</span>';
-            divEach += '</div>';
-            divEach += '</div>';
-            divEach += '</div>';
-            divEach += '<div class="w_right w_25">';
-            divEach += '<span>'+ formatNumber(data.amountByStat[i].amounSatus)+'</span>';
-            divEach += '</div>';
-            divEach += '<div class="clearfix"></div>';
-            divEach += '</div>';
+            if(data.amountByStat[i].statusVtex == 'approve-payment' || data.amountByStat[i].statusVtex == 'cancel'
+                || data.amountByStat[i].statusVtex == 'canceled' || data.amountByStat[i].statusVtex == 'invoice'
+                || data.amountByStat[i].statusVtex == 'invoiced' || data.amountByStat[i].statusVtex == 'order-created'
+                || data.amountByStat[i].statusVtex == 'ready-for-handling' || data.amountByStat[i].statusVtex == 'start-handling'
+                || data.amountByStat[i].statusVtex == 'handling' || data.amountByStat[i].statusVtex == 'payment-pending'){
+                    divEach = '';
+                    divEach += '<div class="widget_summary">';
+                    divEach += '<div class="w_left w_25">';
+                    divEach += '<span>'+cambiarNombreStatus(data.amountByStat[i].statusVtex)[0]+'</span>';
+                    divEach += '</div>';
+                    divEach += '<div class="w_center w_50">';
+                    divEach += '<div class="progress">';
+                    divEach += '<div class="progress-bar bg-'+cambiarNombreStatus(data.amountByStat[i].statusVtex)[1]+'" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: '+Math.round((data.amountByStat[i].amounSatus/montoTotal)*100)+'%;">';
+                    divEach += '<span class="sr-only">60% Complete</span>';
+                    divEach += '</div>';
+                    divEach += '</div>';
+                    divEach += '</div>';
+                    divEach += '<div class="w_right w_25">';
+                    divEach += '<span>'+ formatNumber(data.amountByStat[i].amounSatus)+'</span>';
+                    divEach += '</div>';
+                    divEach += '<div class="clearfix"></div>';
+                    divEach += '</div>';
 
-            divStatusOrdenes += divEach;
+                    divStatusOrdenes += divEach;
+            }
         }
         //console.log(divStatusOrdenes);
         $("#divMontoStatusOrdenes").html(divStatusOrdenes);
@@ -314,30 +331,42 @@ function fillMontoStatus(data){
 
     if(data.ordersByStat != 'undefined' && data.ordersByStat != 'null'){
         for(var i=0; i < data.ordersByStat.length; i++){
-            ordersTotal += Number(data.ordersByStat[i].ordersNumber);
+            if(data.ordersByStat[i].statusVtex == 'approve-payment' || data.ordersByStat[i].statusVtex == 'cancel'
+                || data.ordersByStat[i].statusVtex == 'canceled' || data.ordersByStat[i].statusVtex == 'invoice'
+                || data.ordersByStat[i].statusVtex == 'invoiced' || data.ordersByStat[i].statusVtex == 'order-created'
+                || data.ordersByStat[i].statusVtex == 'ready-for-handling' || data.ordersByStat[i].statusVtex == 'start-handling'
+                || data.ordersByStat[i].statusVtex == 'handling' || data.ordersByStat[i].statusVtex == 'payment-pending'){
+                    ordersTotal += Number(data.ordersByStat[i].ordersNumber);
+                }
         }
         //console.log(ordersTotal);
 
         for(var i=0; i < data.ordersByStat.length; i++){
-            divEach = '';
-            divEach += '<div class="widget_summary">';
-            divEach += '<div class="w_left w_25">';
-            divEach += '<span>'+cambiarNombreStatus(data.ordersByStat[i].statusVtex)[0]+'</span>';
-            divEach += '</div>';
-            divEach += '<div class="w_center w_55">';
-            divEach += '<div class="progress">';
-            divEach += '<div class="progress-bar bg-'+cambiarNombreStatus(data.ordersByStat[i].statusVtex)[1]+'" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: '+Math.round((data.ordersByStat[i].ordersNumber/ordersTotal)*100)+'%;">';
-            divEach += '<span class="sr-only">60% Complete</span>';
-            divEach += '</div>';
-            divEach += '</div>';
-            divEach += '</div>';
-            divEach += '<div class="w_right w_20">';
-            divEach += '<span>'+ new Intl.NumberFormat('en-US').format(data.ordersByStat[i].ordersNumber)+'</span>';
-            divEach += '</div>';
-            divEach += '<div class="clearfix"></div>';
-            divEach += '</div>';
+            if(data.ordersByStat[i].statusVtex == 'approve-payment' || data.ordersByStat[i].statusVtex == 'cancel'
+                || data.ordersByStat[i].statusVtex == 'canceled' || data.ordersByStat[i].statusVtex == 'invoice'
+                || data.ordersByStat[i].statusVtex == 'invoiced' || data.ordersByStat[i].statusVtex == 'order-created'
+                || data.ordersByStat[i].statusVtex == 'ready-for-handling' || data.ordersByStat[i].statusVtex == 'start-handling'
+                || data.ordersByStat[i].statusVtex == 'handling' || data.ordersByStat[i].statusVtex == 'payment-pending'){
+                    divEach = '';
+                    divEach += '<div class="widget_summary">';
+                    divEach += '<div class="w_left w_25">';
+                    divEach += '<span>'+cambiarNombreStatus(data.ordersByStat[i].statusVtex)[0]+'</span>';
+                    divEach += '</div>';
+                    divEach += '<div class="w_center w_55">';
+                    divEach += '<div class="progress">';
+                    divEach += '<div class="progress-bar bg-'+cambiarNombreStatus(data.ordersByStat[i].statusVtex)[1]+'" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: '+Math.round((data.ordersByStat[i].ordersNumber/ordersTotal)*100)+'%;">';
+                    divEach += '<span class="sr-only">60% Complete</span>';
+                    divEach += '</div>';
+                    divEach += '</div>';
+                    divEach += '</div>';
+                    divEach += '<div class="w_right w_20">';
+                    divEach += '<span>'+ new Intl.NumberFormat('en-US').format(data.ordersByStat[i].ordersNumber)+'</span>';
+                    divEach += '</div>';
+                    divEach += '<div class="clearfix"></div>';
+                    divEach += '</div>';
 
-            divStatusNumOrdenes += divEach;
+                    divStatusNumOrdenes += divEach;
+                }
         }
         //console.log(divStatusOrdenes);
         $("#divStatusNumOrdenes").html(divStatusNumOrdenes);
@@ -349,33 +378,30 @@ function cambiarNombreStatus(statusName){
     switch(statusName){
         case 'approve-payment':
             return ['Pago confirmado','green'];
+        case 'request-cancel'://No Contar
         case 'cancel':
-            return ['En cancelación', 'red'];
         case 'canceled':
             return ['Canceladas', 'red'];
         case 'invoice':
-            return ['En Facturación', 'green'];
         case 'invoiced':
             return ['Facturadas', 'green'];
-        case 'on-order-completed':
+        case 'on-order-completed': // No contar
             return ['Orden completa', 'green'];
-        case 'on-order-completed-ffm':
+        case 'on-order-completed-ffm': //No contar
             return ['Orden completa en FC', 'green'];
-        case 'order-accepted':
+        case 'order-accepted': // No contar
             return ['Orden aceptada', 'green'];
         case 'order-created':
             return ['Orden creada', 'green'];
-        case 'ready-for-handling':
-            return ['Previo picking', 'blue'];
-        case 'waiting-ffmt-authorization':
+        case 'waiting-ffmt-authorization': //No Contar
             return ['En autorización por FC', 'green'];
+        case 'ready-for-handling':
         case 'start-handling':
-            return ['Iniciando Picking','blue'];
         case 'handling':
-            return ['En picking','blue'];
+            return ['Preparación para envío','blue'];
         case 'payment-pending':
             return ['Pago pendiente', 'orange'];
-        case 'window-to-cancel':
+        case 'window-to-cancel': //No contar
             return ['Ventana de Cancelación','orange'];
         default:
             return ['Otro', 'grey'];
