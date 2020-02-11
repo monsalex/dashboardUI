@@ -280,8 +280,14 @@ function fillMontoStatus(data){
     var divEach ='';
     var montoTotal = 0;
     var ordersTotal = 0;
-    var arrAmount = [];
-    var arrOrders = [];
+    var arrAmountCancel = [];
+    var arrAmountHandling = [];
+    var arrAmountInvoice = [];
+    var arrAmountApprove = [];
+    var arrAmountPending = [];
+    var arrAmountCreated = [];
+    var arrTotales = [];
+    var conteo = 0;
 
     if(data.amountByStat != 'undefined' && data.amountByStat != 'null'){
         for(var i=0; i < data.amountByStat.length; i++){
@@ -289,84 +295,235 @@ function fillMontoStatus(data){
                 || data.amountByStat[i].statusVtex == 'canceled' || data.amountByStat[i].statusVtex == 'invoice'
                 || data.amountByStat[i].statusVtex == 'invoiced' || data.amountByStat[i].statusVtex == 'order-created'
                 || data.amountByStat[i].statusVtex == 'ready-for-handling' || data.amountByStat[i].statusVtex == 'start-handling'
-                || data.amountByStat[i].statusVtex == 'handling' || data.amountByStat[i].statusVtex == 'payment-pending'){
+                || data.amountByStat[i].statusVtex == 'handling' || data.amountByStat[i].statusVtex == 'payment-pending'
+                || data.amountByStat[i].statusVtex == 'order-created'){
                     montoTotal += Number(data.amountByStat[i].amounSatus);
                     //console.log(data.amountByStat[i].statusVtex)
+                    
+                    if(data.amountByStat[i].statusVtex == 'order-created'){
+                        arrAmountCreated.push(data.amountByStat[i].amounSatus);
+                    }
+
+                    if(data.amountByStat[i].statusVtex == 'cancel'|| data.amountByStat[i].statusVtex == 'canceled' ){
+                        arrAmountCancel.push(data.amountByStat[i].amounSatus);
+                    }
+
+                    if(data.amountByStat[i].statusVtex == 'invoice'|| data.amountByStat[i].statusVtex == 'invoiced' ){
+                        arrAmountInvoice.push(data.amountByStat[i].amounSatus);
+                    }
+
+                    if(data.amountByStat[i].statusVtex == 'ready-for-handling' || data.amountByStat[i].statusVtex == 'start-handling'
+                    || data.amountByStat[i].statusVtex == 'handling'){
+                        arrAmountHandling.push(data.amountByStat[i].amounSatus);
+                    }
+
+                    if(data.amountByStat[i].statusVtex == 'approve-payment'){
+                        arrAmountApprove.push(data.amountByStat[i].amounSatus);
+                    }
+
+                    if(data.amountByStat[i].statusVtex == 'payment-pending'){
+                        arrAmountPending.push(data.amountByStat[i].amounSatus);
+                    }
+
 
             }
         }
-        console.log(arrAmount);
 
-        for(var i=0; i < data.amountByStat.length; i++){
-            if(data.amountByStat[i].statusVtex == 'approve-payment' || data.amountByStat[i].statusVtex == 'cancel'
-                || data.amountByStat[i].statusVtex == 'canceled' || data.amountByStat[i].statusVtex == 'invoice'
-                || data.amountByStat[i].statusVtex == 'invoiced' || data.amountByStat[i].statusVtex == 'order-created'
-                || data.amountByStat[i].statusVtex == 'ready-for-handling' || data.amountByStat[i].statusVtex == 'start-handling'
-                || data.amountByStat[i].statusVtex == 'handling' || data.amountByStat[i].statusVtex == 'payment-pending'){
-                    divEach = '';
-                    divEach += '<div class="widget_summary">';
-                    divEach += '<div class="w_left w_25">';
-                    divEach += '<span>'+cambiarNombreStatus(data.amountByStat[i].statusVtex)[0]+'</span>';
-                    divEach += '</div>';
-                    divEach += '<div class="w_center w_50">';
-                    divEach += '<div class="progress">';
-                    divEach += '<div class="progress-bar bg-'+cambiarNombreStatus(data.amountByStat[i].statusVtex)[1]+'" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: '+Math.round((data.amountByStat[i].amounSatus/montoTotal)*100)+'%;">';
-                    divEach += '<span class="sr-only">60% Complete</span>';
-                    divEach += '</div>';
-                    divEach += '</div>';
-                    divEach += '</div>';
-                    divEach += '<div class="w_right w_25">';
-                    divEach += '<span>'+ formatNumber(data.amountByStat[i].amounSatus)+'</span>';
-                    divEach += '</div>';
-                    divEach += '<div class="clearfix"></div>';
-                    divEach += '</div>';
+        for(var i=0; i<arrAmountCreated.length;i++){
+            conteo += arrAmountCreated[i];
+        }
+        if(conteo >0){
+            arrTotales.push(['order-created', conteo]);
+        }
 
-                    divStatusOrdenes += divEach;
-            }
+        conteo = 0;
+        for(var i=0; i<arrAmountCancel.length;i++){
+            conteo += arrAmountCancel[i];
+        }
+        if(conteo >0){
+            arrTotales.push(['cancel', conteo]);
+        }
+
+        conteo = 0;
+        for(var i=0; i<arrAmountPending.length;i++){
+            conteo += arrAmountPending[i];
+        }
+        if(conteo >0){
+            arrTotales.push(['payment-pending', conteo]);
+        }
+
+        conteo = 0;
+        for(var i=0; i<arrAmountApprove.length;i++){
+            conteo += arrAmountApprove[i];
+        }
+        if(conteo >0){
+            arrTotales.push(['approve-payment', conteo]);
+        }
+
+        conteo = 0;
+        for(var i=0; i<arrAmountHandling.length;i++){
+            conteo += arrAmountHandling[i];
+        }
+        if(conteo >0){
+            arrTotales.push(['handling', conteo]);
+        }
+
+        conteo = 0;
+        for(var i=0; i<arrAmountInvoice.length;i++){
+            conteo += arrAmountInvoice[i];
+        }
+        if(conteo >0){
+            arrTotales.push(['invoiced', conteo]);
+        }
+
+        for(var i=0; i < arrTotales.length; i++){
+            
+            divEach = '';
+            divEach += '<div class="widget_summary">';
+            divEach += '<div class="w_left w_25">';
+            divEach += '<span>'+cambiarNombreStatus(arrTotales[i][0])[0]+'</span>';
+            divEach += '</div>';
+            divEach += '<div class="w_center w_50">';
+            divEach += '<div class="progress">';
+            divEach += '<div class="progress-bar bg-'+cambiarNombreStatus(arrTotales[i][0])[1]+'" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: '+Math.round((arrTotales[i][1]/montoTotal)*100)+'%;">';
+            divEach += '<span class="sr-only">60% Complete</span>';
+            divEach += '</div>';
+            divEach += '</div>';
+            divEach += '</div>';
+            divEach += '<div class="w_right w_25">';
+            divEach += '<span>'+ formatNumber(arrTotales[i][1])+'</span>';
+            divEach += '</div>';
+            divEach += '<div class="clearfix"></div>';
+            divEach += '</div>';
+
+            divStatusOrdenes += divEach;
+            
         }
         //console.log(divStatusOrdenes);
         $("#divMontoStatusOrdenes").html(divStatusOrdenes);
 
     }
 
+    
+
     if(data.ordersByStat != 'undefined' && data.ordersByStat != 'null'){
+
+        arrAmountCancel = [];
+        arrAmountHandling = [];
+        arrAmountInvoice = [];
+        arrAmountPending = [];
+        arrAmountApprove = [];
+        arrAmountCreated = [];
+        arrTotales = [];
+        conteo = 0;
         for(var i=0; i < data.ordersByStat.length; i++){
             if(data.ordersByStat[i].statusVtex == 'approve-payment' || data.ordersByStat[i].statusVtex == 'cancel'
                 || data.ordersByStat[i].statusVtex == 'canceled' || data.ordersByStat[i].statusVtex == 'invoice'
                 || data.ordersByStat[i].statusVtex == 'invoiced' || data.ordersByStat[i].statusVtex == 'order-created'
                 || data.ordersByStat[i].statusVtex == 'ready-for-handling' || data.ordersByStat[i].statusVtex == 'start-handling'
-                || data.ordersByStat[i].statusVtex == 'handling' || data.ordersByStat[i].statusVtex == 'payment-pending'){
+                || data.ordersByStat[i].statusVtex == 'handling' || data.ordersByStat[i].statusVtex == 'payment-pending'
+                || data.ordersByBrand[i].statusVtex == 'order-created'){
                     ordersTotal += Number(data.ordersByStat[i].ordersNumber);
+
+                    if(data.ordersByStat[i].statusVtex == 'order-created'){
+                        arrAmountCreated.push(data.ordersByStat[i].ordersNumber);
+                    }
+
+                    if(data.ordersByStat[i].statusVtex == 'cancel'|| data.ordersByStat[i].statusVtex == 'canceled' ){
+                        arrAmountCancel.push(data.ordersByStat[i].ordersNumber);
+                    }
+
+                    if(data.ordersByStat[i].statusVtex == 'invoice'|| data.ordersByStat[i].statusVtex == 'invoiced' ){
+                        arrAmountInvoice.push(data.ordersByStat[i].ordersNumber);
+                    }
+
+                    if(data.ordersByStat[i].statusVtex == 'ready-for-handling' || data.ordersByStat[i].statusVtex == 'start-handling'
+                    || data.ordersByStat[i].statusVtex == 'handling'){
+                        arrAmountHandling.push(data.ordersByStat[i].ordersNumber);
+                    }
+
+                    if(data.ordersByStat[i].statusVtex == 'approve-payment'){
+                        arrAmountApprove.push(data.ordersByStat[i].ordersNumber);
+                    }
+
+                    if(data.ordersByStat[i].statusVtex == 'payment-pending'){
+                        arrAmountPending.push(data.ordersByStat[i].ordersNumber);
+                    }
+
+
                 }
         }
-        //console.log(ordersTotal);
+        
+        for(var i=0; i<arrAmountCreated.length;i++){
+            conteo += arrAmountCreated[i];
+        }
+        if(conteo >0){
+            arrTotales.push(['order-created', conteo]);
+        }
 
-        for(var i=0; i < data.ordersByStat.length; i++){
-            if(data.ordersByStat[i].statusVtex == 'approve-payment' || data.ordersByStat[i].statusVtex == 'cancel'
-                || data.ordersByStat[i].statusVtex == 'canceled' || data.ordersByStat[i].statusVtex == 'invoice'
-                || data.ordersByStat[i].statusVtex == 'invoiced' || data.ordersByStat[i].statusVtex == 'order-created'
-                || data.ordersByStat[i].statusVtex == 'ready-for-handling' || data.ordersByStat[i].statusVtex == 'start-handling'
-                || data.ordersByStat[i].statusVtex == 'handling' || data.ordersByStat[i].statusVtex == 'payment-pending'){
-                    divEach = '';
-                    divEach += '<div class="widget_summary">';
-                    divEach += '<div class="w_left w_25">';
-                    divEach += '<span>'+cambiarNombreStatus(data.ordersByStat[i].statusVtex)[0]+'</span>';
-                    divEach += '</div>';
-                    divEach += '<div class="w_center w_55">';
-                    divEach += '<div class="progress">';
-                    divEach += '<div class="progress-bar bg-'+cambiarNombreStatus(data.ordersByStat[i].statusVtex)[1]+'" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: '+Math.round((data.ordersByStat[i].ordersNumber/ordersTotal)*100)+'%;">';
-                    divEach += '<span class="sr-only">60% Complete</span>';
-                    divEach += '</div>';
-                    divEach += '</div>';
-                    divEach += '</div>';
-                    divEach += '<div class="w_right w_20">';
-                    divEach += '<span>'+ new Intl.NumberFormat('en-US').format(data.ordersByStat[i].ordersNumber)+'</span>';
-                    divEach += '</div>';
-                    divEach += '<div class="clearfix"></div>';
-                    divEach += '</div>';
+        conteo = 0;
+        for(var i=0; i<arrAmountCancel.length;i++){
+            conteo += arrAmountCancel[i];
+        }
+        if(conteo >0){
+            arrTotales.push(['cancel', conteo]);
+        }
 
-                    divStatusNumOrdenes += divEach;
-                }
+        conteo = 0;
+        for(var i=0; i<arrAmountPending.length;i++){
+            conteo += arrAmountPending[i];
+        }
+        if(conteo >0){
+            arrTotales.push(['payment-pending', conteo]);
+        }
+
+        conteo = 0;
+        for(var i=0; i<arrAmountApprove.length;i++){
+            conteo += arrAmountApprove[i];
+        }
+        if(conteo >0){
+            arrTotales.push(['approve-payment', conteo]);
+        }
+
+        conteo = 0;
+        for(var i=0; i<arrAmountHandling.length;i++){
+            conteo += arrAmountHandling[i];
+        }
+        if(conteo >0){
+            arrTotales.push(['handling', conteo]);
+        }
+
+        conteo = 0;
+        for(var i=0; i<arrAmountInvoice.length;i++){
+            conteo += arrAmountInvoice[i];
+        }
+        if(conteo >0){
+            arrTotales.push(['invoiced', conteo]);
+        }
+        
+
+        for(var i=0; i < arrTotales.length; i++){
+            
+            divEach = '';
+            divEach += '<div class="widget_summary">';
+            divEach += '<div class="w_left w_25">';
+            divEach += '<span>'+cambiarNombreStatus(arrTotales[i][0])[0]+'</span>';
+            divEach += '</div>';
+            divEach += '<div class="w_center w_55">';
+            divEach += '<div class="progress">';
+            divEach += '<div class="progress-bar bg-'+cambiarNombreStatus(arrTotales[i][0])[1]+'" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: '+Math.round((arrTotales[i][1]/ordersTotal)*100)+'%;">';
+            divEach += '<span class="sr-only">60% Complete</span>';
+            divEach += '</div>';
+            divEach += '</div>';
+            divEach += '</div>';
+            divEach += '<div class="w_right w_20">';
+            divEach += '<span>'+ new Intl.NumberFormat('en-US').format(arrTotales[i][1])+'</span>';
+            divEach += '</div>';
+            divEach += '<div class="clearfix"></div>';
+            divEach += '</div>';
+
+            divStatusNumOrdenes += divEach;
+                
         }
         //console.log(divStatusOrdenes);
         $("#divStatusNumOrdenes").html(divStatusNumOrdenes);
@@ -392,7 +549,7 @@ function cambiarNombreStatus(statusName){
         case 'order-accepted': // No contar
             return ['Orden aceptada', 'green'];
         case 'order-created':
-            return ['Orden creada', 'green'];
+            return ['Orden creada', 'blue-sky'];
         case 'waiting-ffmt-authorization': //No Contar
             return ['En autorización por FC', 'green'];
         case 'ready-for-handling':
@@ -528,10 +685,7 @@ function reemp_Mes_(fecha){
 function formatNumber(num){
     //console.log(num)
     const formatter = new Intl.NumberFormat('en-US',{
-<<<<<<< HEAD
-=======
         
->>>>>>> 616c509144a0b3c09ffbfa9ff455d5356457b187
         minimumFractionDigits: 0
     });
     return 'Q' + formatter.format(num);
