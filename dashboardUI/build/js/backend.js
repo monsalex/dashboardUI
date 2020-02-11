@@ -502,11 +502,10 @@ function reemp_Mes_(fecha){
 function formatNumber(num){
     //console.log(num)
     const formatter = new Intl.NumberFormat('en-US',{
-        style: 'currency',
-        currency: 'USD',
+        
         minimumFractionDigits: 0
     });
-    return formatter.format(num);
+    return 'Q' + formatter.format(num);
 }
 
 var theme = {
