@@ -55,7 +55,7 @@ function pickDateBackend(startdate, enddate, source){
             //Tables
 
             //Charts
-            fillCharts(data);
+            fillCharts(data.ordersDateBefore);
             //Charts
 
             //TipoPago
@@ -110,7 +110,12 @@ function fillKPIs(data){
 
 function fillCharts(data){
     //echart Line
-    
+    console.log(data);
+
+
+    var arrPagadas = [];
+    var arrNoPagadas = [];
+    var Canceladas = [];
     var arrDates = [];
     
     for(var i=6; i>=0; i--){
@@ -295,17 +300,16 @@ function fillMontoStatus(data){
     var arrAmountCreated = [];
     var arrTotales = [];
     var conteo = 0;
-
+    
     if(data.amountByStat != 'undefined' && data.amountByStat != 'null'){
         for(var i=0; i < data.amountByStat.length; i++){
             if(data.amountByStat[i].statusVtex == 'approve-payment' || data.amountByStat[i].statusVtex == 'cancel'
                 || data.amountByStat[i].statusVtex == 'canceled' || data.amountByStat[i].statusVtex == 'invoice'
                 || data.amountByStat[i].statusVtex == 'invoiced' || data.amountByStat[i].statusVtex == 'order-created'
                 || data.amountByStat[i].statusVtex == 'ready-for-handling' || data.amountByStat[i].statusVtex == 'start-handling'
-                || data.amountByStat[i].statusVtex == 'handling' || data.amountByStat[i].statusVtex == 'payment-pending'
-                || data.amountByStat[i].statusVtex == 'order-created'){
+                || data.amountByStat[i].statusVtex == 'handling' || data.amountByStat[i].statusVtex == 'payment-pending'){
                     montoTotal += Number(data.amountByStat[i].amounSatus);
-                    //console.log(data.amountByStat[i].statusVtex)
+                    
                     
                     if(data.amountByStat[i].statusVtex == 'order-created'){
                         arrAmountCreated.push(data.amountByStat[i].amounSatus);
@@ -423,14 +427,17 @@ function fillMontoStatus(data){
         arrAmountCreated = [];
         arrTotales = [];
         conteo = 0;
+        
         for(var i=0; i < data.ordersByStat.length; i++){
             if(data.ordersByStat[i].statusVtex == 'approve-payment' || data.ordersByStat[i].statusVtex == 'cancel'
-                || data.ordersByStat[i].statusVtex == 'canceled' || data.ordersByStat[i].statusVtex == 'invoice'
-                || data.ordersByStat[i].statusVtex == 'invoiced' || data.ordersByStat[i].statusVtex == 'order-created'
-                || data.ordersByStat[i].statusVtex == 'ready-for-handling' || data.ordersByStat[i].statusVtex == 'start-handling'
-                || data.ordersByStat[i].statusVtex == 'handling' || data.ordersByStat[i].statusVtex == 'payment-pending'
-                || data.ordersByBrand[i].statusVtex == 'order-created'){
+            || data.ordersByStat[i].statusVtex == 'canceled' || data.ordersByStat[i].statusVtex == 'invoice'
+            || data.ordersByStat[i].statusVtex == 'invoiced' || data.ordersByStat[i].statusVtex == 'order-created'
+            || data.ordersByStat[i].statusVtex == 'ready-for-handling' || data.ordersByStat[i].statusVtex == 'start-handling'
+            || data.ordersByStat[i].statusVtex == 'handling' || data.ordersByStat[i].statusVtex == 'payment-pending'){
+                    
+                    
                     ordersTotal += Number(data.ordersByStat[i].ordersNumber);
+                    
 
                     if(data.ordersByStat[i].statusVtex == 'order-created'){
                         arrAmountCreated.push(data.ordersByStat[i].ordersNumber);
