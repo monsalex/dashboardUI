@@ -115,15 +115,78 @@ function fillCharts(data){
 
     var arrPagadas = [];
     var arrNoPagadas = [];
-    var Canceladas = [];
+    var arrCanceladas = [];
     var arrDates = [];
+    var isCancel = false;
+    var isPagada = false;
+    var isNopagada = false;
     
     for(var i=6; i>=0; i--){
         //console.log(i);
         arrDates.push(reemp_Mes_(moment().subtract(i,'days').format("MMM D YY")));
-        //console.log(arrDates[i]);
+        
     }
-    //arrDates.push(moment().format("MMM D YY"));
+    for(var j=6; j>=0; j--){
+        isCancel = false;
+        isPagada = false;
+        isNopagada = false;
+        for(var i=0;i<data.length;i++){
+            //console.log((data[j].Day));
+
+            if(moment().subtract(j,'days').format("YYYY-MM-DDT00:00:00") == data[i].Day){
+                if(data[i].vtexStatus == 'invoice'){
+                    for(var x = 0;x<arrPagadas.length;x++){
+                        if(arrPagadas[x][0] == 'invoice' && arrPagadas[x][1] == moment().subtract(j,'days').format("MMM D YY"))
+                            isPagada = true;
+                        break;
+                    }
+                    if(!isPagada)
+                        arrPagadas.push(['invoice', moment().subtract(j,'days').format("MMM D YY"), data[j].AmountPerDay]);
+                }
+                if(data[i].vtexStatus == 'payment-pending'){
+                    for(var x = 0;x<arrNoPagadas.length;x++){
+                        if(arrNoPagadas[x][0] == 'payment-pending' && arrNoPagadas[x][1] == moment().subtract(j,'days').format("MMM D YY"))
+                            isNopagada = true;
+                        break;
+                    }
+                    if(!isNopagada)
+                        arrNoPagadas.push(['payment-pending', moment().subtract(j,'days').format("MMM D YY"), data[j].AmountPerDay]);
+                }
+                if(data[i].vtexStatus == 'cancel'){
+                    for(var x = 0;x<arrCanceladas.length;x++){
+                        if(arrCanceladas[x][0] == 'cancel' && arrCanceladas[x][1] == moment().subtract(j,'days').format("MMM D YY"))
+                            isCancel = true;
+                        break;
+                    }
+                    if(!isCancel)
+                        arrCanceladas.push(['cancel', moment().subtract(j,'days').format("MMM D YY"), data[j].AmountPerDay]);
+                    
+                }
+            }
+        }
+    }
+    
+    console.log(arrPagadas);
+    //console.log(arrNoPagadas);
+    //console.log(arrCanceladas);
+    var arrPagadsChart = [];
+    for(var i=0;i<arrPagadas.length;i++){
+        isPagada = false;
+        for(var j=6; j>=0; j--){
+
+            if(arrPagadas[i][1].includes(moment().subtract(j,'days').format("MMM D YY"))){
+            //if(moment().subtract(j,'days').format("MMM D YY") == arrPagadas[i][1]){
+                arrPagadsChart.push([moment().subtract(j,'days').format("D"),arrPagadas[i][2]]);
+            }else{
+                if(!isPagada){
+                    //arrPagadsChart.push([moment().subtract(j,'days').format("D"),0]);
+                    isPagada = true;
+                }
+            }
+        }
+    }
+    console.log(arrPagadsChart);
+
 
     //Inicialización Configuración
     if ($('#echart_line_').length) {
