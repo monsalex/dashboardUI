@@ -55,7 +55,7 @@ function pickDateBackend(startdate, enddate, source){
             //Tables
 
             //Charts
-            fillCharts(data.ordersDateBefore);
+            fillCharts(data.ordersDateBefore, enddate);
             //Charts
 
             //TipoPago
@@ -108,84 +108,35 @@ function fillKPIs(data){
     }
 }
 
-function fillCharts(data){
+function fillCharts(data, enddate){
     //echart Line
-    console.log(data);
+    //var end = moment(enddate+ " 23:59:59").format("YYYY-MM-DD HH:MM:SS") 
+    //console.log(moment(enddate));
 
 
     var arrPagadas = [];
     var arrNoPagadas = [];
     var arrCanceladas = [];
     var arrDates = [];
-    var isCancel = false;
-    var isPagada = false;
-    var isNopagada = false;
+
+    const arrs = {
+        invoice: arrPagadas,
+        'payment-pending': arrNoPagadas,
+        cancel: arrCanceladas
+    }
     
     for(var i=6; i>=0; i--){
         //console.log(i);
-        arrDates.push(reemp_Mes_(moment().subtract(i,'days').format("MMM D YY")));
+        arrDates.push(reemp_Mes_(moment(enddate).subtract(i,'days').format("MMM D YY")));
         
     }
-    for(var j=6; j>=0; j--){
-        isCancel = false;
-        isPagada = false;
-        isNopagada = false;
-        for(var i=0;i<data.length;i++){
-            //console.log((data[j].Day));
 
-            if(moment().subtract(j,'days').format("YYYY-MM-DDT00:00:00") == data[i].Day){
-                if(data[i].vtexStatus == 'invoice'){
-                    for(var x = 0;x<arrPagadas.length;x++){
-                        if(arrPagadas[x][0] == 'invoice' && arrPagadas[x][1] == moment().subtract(j,'days').format("MMM D YY"))
-                            isPagada = true;
-                        break;
-                    }
-                    if(!isPagada)
-                        arrPagadas.push(['invoice', moment().subtract(j,'days').format("MMM D YY"), data[j].AmountPerDay]);
-                }
-                if(data[i].vtexStatus == 'payment-pending'){
-                    for(var x = 0;x<arrNoPagadas.length;x++){
-                        if(arrNoPagadas[x][0] == 'payment-pending' && arrNoPagadas[x][1] == moment().subtract(j,'days').format("MMM D YY"))
-                            isNopagada = true;
-                        break;
-                    }
-                    if(!isNopagada)
-                        arrNoPagadas.push(['payment-pending', moment().subtract(j,'days').format("MMM D YY"), data[j].AmountPerDay]);
-                }
-                if(data[i].vtexStatus == 'cancel'){
-                    for(var x = 0;x<arrCanceladas.length;x++){
-                        if(arrCanceladas[x][0] == 'cancel' && arrCanceladas[x][1] == moment().subtract(j,'days').format("MMM D YY"))
-                            isCancel = true;
-                        break;
-                    }
-                    if(!isCancel)
-                        arrCanceladas.push(['cancel', moment().subtract(j,'days').format("MMM D YY"), data[j].AmountPerDay]);
-                    
-                }
-            }
-        }
-    }
-    
-    console.log(arrPagadas);
-    //console.log(arrNoPagadas);
-    //console.log(arrCanceladas);
-    var arrPagadsChart = [];
-    for(var i=0;i<arrPagadas.length;i++){
-        isPagada = false;
-        for(var j=6; j>=0; j--){
+    data.forEach(element => {
+        let status = element.vtexStatus;
+        let arr = arrs[status];
+        if(arr) arr.push(element.AmountPerDay);
+    })
 
-            if(arrPagadas[i][1].includes(moment().subtract(j,'days').format("MMM D YY"))){
-            //if(moment().subtract(j,'days').format("MMM D YY") == arrPagadas[i][1]){
-                arrPagadsChart.push([moment().subtract(j,'days').format("D"),arrPagadas[i][2]]);
-            }else{
-                if(!isPagada){
-                    //arrPagadsChart.push([moment().subtract(j,'days').format("D"),0]);
-                    isPagada = true;
-                }
-            }
-        }
-    }
-    console.log(arrPagadsChart);
 
 
     //Inicialización Configuración
@@ -195,7 +146,7 @@ function fillCharts(data){
 
         echartLine.setOption({
             title: {
-                text: 'Ventas',
+                text: 'Monto por tipo de orden',
                 subtext: ''
             },
             tooltip: {
@@ -204,7 +155,7 @@ function fillCharts(data){
             legend: {
                 x: 220,
                 y: 40,
-                data: ['Canceladas', 'No pagadas', 'Pagadas']
+                data: ['Q Pagadas', 'Q No pagadas', 'Q Canceladas']
             },
             toolbox: {
                 show: true,
@@ -239,7 +190,7 @@ function fillCharts(data){
                 type: 'value'
             }],
             series: [{
-                name: 'Pagadas',
+                name: 'Q Pagadas',
                 type: 'line',
                 smooth: true,
                 itemStyle: {
@@ -249,9 +200,9 @@ function fillCharts(data){
                         }
                     }
                 },
-                data: [830, 612, 521, 954, 260, 830, 710]
+                data: arrPagadas//[830, 612, 521, 954, 260, 830, 710]
             }, {
-                name: 'No pagadas',
+                name: 'Q No pagadas',
                 type: 'line',
                 smooth: true,
                 itemStyle: {
@@ -261,9 +212,9 @@ function fillCharts(data){
                         }
                     }
                 },
-                data: [5, 6, 10, 15, 3, 3, 2]
+                data: arrNoPagadas//[5, 6, 10, 15, 3, 3, 2]
             }, {
-                name: 'Canceladas',
+                name: 'Q Canceladas',
                 type: 'line',
                 smooth: true,
                 itemStyle: {
@@ -273,7 +224,7 @@ function fillCharts(data){
                         }
                     }
                 },
-                data: [20, 30, 15, 40, 120, 90, 20]
+                data: arrCanceladas//[20, 30, 15, 40, 120, 90, 20]
             }]
         });
 
