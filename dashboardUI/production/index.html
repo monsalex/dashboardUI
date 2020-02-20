@@ -93,10 +93,10 @@
                       <li><a href="calendar.html">Calendar</a></li>
                     </ul>
                   </li-->
-                  <li><a><i class="fa fa-table"></i> Tables <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-table"></i> Tablas <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <!--li-- ><a href="tables.html">Tables</a></!--li-->
-                      <li><a href="tables_dynamic.html">Tablas Dinámicas</a></li>
+                      <li><a href="tables_payments.html">Pagos</a></li>
+                      <li><a href="tables_dynamic.html">Productos</a></li>
                     </ul>
                   </li>
                   <!--li><a><i class="fa fa-bar-chart-o"></i> Data Presentation <span class="fa fa-chevron-down"></span></a>
@@ -530,8 +530,8 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6 col-sm-4 ">
-              <div class="x_panel tile fixed_height_320 overflow_hidden">
+            <div class="col-md-6 col-sm-6 ">
+              <div class="x_panel tile  overflow_hidden" style="height: 373px !important;">
                 <div class="x_title">
                   <h2>Órdenes por tipo de pago</h2>
                   <ul class="nav navbar-right panel_toolbox">
@@ -607,8 +607,34 @@
                 </div>
               </div>
             </div>
+            <!-- pie chart -->
+            <div class="col-md-6 col-sm-6  ">
+              <div class="x_panel tile overflow_hidden">
+                <div class="x_title">
+                  <h2>Pagadas con TAZ <small>Visa/Mastercard</small></h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" href="#">Settings 1</a>
+                          <a class="dropdown-item" href="#">Settings 2</a>
+                        </div>
+                    </li>
+                   <!--li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </!--li-->
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content2">
+                  <div id="graph_donut_TAZ" style="width:100%; height:300px;"></div>
+                </div>
+              </div>
+            </div>
+            <!-- /Pie chart -->
           </div>
-
+          
 
           <!--div class="row">
             <div class="col-md-4 col-sm-4 ">
@@ -1001,6 +1027,10 @@
     <!-- ECharts -->
     <script src="../vendors/echarts/dist/echarts.min.js"></script>
     <script src="../vendors/echarts/map/js/world.js"></script>
+
+    <!-- morris.js -->
+    <script src="../vendors/raphael/raphael.min.js"></script>
+    <script src="../vendors/morris.js/morris.min.js"></script>
 
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>

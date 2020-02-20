@@ -38,7 +38,7 @@ function pickDateBackend(startdate, enddate, source){
         data: JSON.stringify(params),
         success: function(result){
             var data = JSON.parse(result.body);
-            console.log(data); 
+            //console.log(data); 
             //console.log(data.ordersByStat.length);
 
             //Charts
@@ -51,6 +51,7 @@ function pickDateBackend(startdate, enddate, source){
             //TableDropOff.drop();
             fillTables(data);
             
+            fillTablesCategorias(data.ordersByCategory);
             
             //Tables
 
@@ -70,8 +71,40 @@ function pickDateBackend(startdate, enddate, source){
 
             //Ordenes por Semanas
             fillReporteOrdenes(data.ordersByWeek);
+
+            fillTazBines(data.ordersByPayBines);
         }
     })
+}
+
+function fillTazBines(data){
+    const arrData = [{label: 'Sin registros', value:0}];
+    
+    if(data){
+        data.forEach(element=>{
+            //console.log(element.paymentType);
+            arrData.push({label: element.paymentType, value: element.ordersNumber});
+        });
+    }
+
+    if ($('#graph_donut_TAZ').length) {
+
+        Morris.Donut({
+            element: 'graph_donut_TAZ',
+            data: arrData, /*[
+                { label: 'Jam', value: 0 },
+                { label: 'Frosted', value: 40 },
+                { label: 'Custard', value: 25 },
+                { label: 'Sugar', value: 10 }
+            ],*/
+            colors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+            formatter: function (y) {
+                return y + "";
+            },
+            resize: true
+        });
+
+    }
 }
 
 function fillKPIs(data){
@@ -595,13 +628,83 @@ function cambiarNombreStatus(statusName){
     }
 }
 
+function fillTablesCategorias(data){
+    var tableBody = '';
+    var tableHeader = '';
+
+    if(data){
+        //fillTables(data.ordersByBrand);
+        tableHeader = '<thead><tr><th>Categorias</th><th>Cantidad Productos</th><th>Monto Facturado</th></tr></thead>';
+        tableBody = '<tbody>'
+
+        data.forEach(element =>{
+            tableBody += '<tr><td>'+ element.Categoria +'</td><td>'+ element.ArticulosFacturados +'</td><td>'+ formatNumber(element.MontoFacturado) +'</td></tr>';
+        })
+            
+        
+        tableBody += '</tbody>'
+        
+
+        
+        //console.log(tableHeader+tableBody);
+        $('#datatable-buttons_categorias').html(tableHeader + tableBody);
+
+        $("#datatable-buttons_categorias").DataTable({}).destroy();
+
+        var handleDataTableButtons = function () {
+            if ($("#datatable-buttons_categorias").length) {
+                $("#datatable-buttons_categorias").DataTable({
+                    dom: "Blfrtip",
+                    buttons: [
+                        {
+                            extend: "copy",
+                            className: "btn-sm"
+                        },
+                        {
+                            extend: "csv",
+                            className: "btn-sm"
+                        },
+                        {
+                            extend: "excel",
+                            className: "btn-sm"
+                        },
+                        {
+                            extend: "pdfHtml5",
+                            className: "btn-sm"
+                        },
+                        {
+                            extend: "print",
+                            className: "btn-sm"
+                        },
+                    ],
+                    responsive: true
+                });
+            }
+        };
+    
+        TableManageButtons = function () {
+            "use strict";
+            return {
+                init: function () {
+                    handleDataTableButtons();
+                }
+            };
+        }();
+
+        
+        TableManageButtons.init();
+
+    }
+        
+}
+
 function fillTables(data){
     var tableBody = '';
     var tableHeader = '';
 
     if(data.ordersByBrand != 'undefined' && data.ordersByBrand != null){
         //fillTables(data.ordersByBrand);
-        tableHeader = '<thead><tr><th>Marca</th><th>Cantidad Productos</th><th>Monto Total</th></tr></thead>';
+        tableHeader = '<thead><tr><th>Marca</th><th>Cantidad Productos</th><th>Monto</th></tr></thead>';
         tableBody = '<tbody>'
         for(var i = 0; i < data.ordersByBrand.length; i++){
             tableBody += '<tr><td>'+ data.ordersByBrand[i].brandName +'</td><td>'+ data.ordersByBrand[i].quantityProducts +'</td><td>'+ formatNumber(data.ordersByBrand[i].price) +'</td></tr>';
@@ -697,7 +800,9 @@ function fillReporteSemanas(data){
         tableBody = '<tbody>'
         data.forEach(element =>{
             if(element.Tipo == 'TAZ'){
-                tableBody += '<tr><td><strong>'+element.Tipo+'</strong></br>TAZ(%)</td><td>'+formatNumber(element.Monto1)+'</br>'+Math.round((element.Monto1*100)/s1)+'%</td><td>'+formatNumber(element.Monto2)+'</br>'+Math.round((element.Monto2*100)/s2)+'%</td><td>'+formatNumber(element.Monto3)+'</br>'+Math.round((element.Monto3*100)/s3)+'%</td><td>'+formatNumber(element.Monto4)+'</br>'+Math.round((element.Monto4*100)/s4)+'%</td><td>'+formatNumber(element.Monto5)+'</br>'+Math.round((element.Monto5*100)/s5)+'%</td><td>'+formatNumber(element.Monto6)+'</br>'+Math.round((element.Monto6*100)/s6)+'%</td><td>'+formatNumber(element.Total)+'</br>'+Math.round((element.Total*100)/total)+'%</td><td>'+Math.round((element.Total*100)/total)+'%</td></tr>';
+                tableBody += '<tr><td><strong>'+element.Tipo+'</strong></td><td>'+formatNumber(element.Monto1)+'</td><td>'+formatNumber(element.Monto2)+'</td><td>'+formatNumber(element.Monto3)+'</td><td>'+formatNumber(element.Monto4)+'</td><td>'+formatNumber(element.Monto5)+'</td><td>'+formatNumber(element.Monto6)+'</td><td>'+formatNumber(element.Total)+'</td><td>'+Math.round((element.Total*100)/total)+'%</td></tr>';
+                tableBody += '<tr><td><strong>TAZ(%)</strong></td><td align="center">'+Math.round((element.Monto1*100)/s1)+'%</td><td align="center">'+Math.round((element.Monto2*100)/s2)+'%</td><td align="center">'+Math.round((element.Monto3*100)/s3)+'%</td><td align="center">'+Math.round((element.Monto4*100)/s4)+'%</td><td align="center">'+Math.round((element.Monto5*100)/s5)+'%</td><td align="center">'+Math.round((element.Monto6*100)/s6)+'%</td><td align="center">'+Math.round((element.Total*100)/total)+'%</td><td></td></tr>';
+
             }else{
                 tableBody += '<tr><td><strong>'+element.Tipo+'</strong></td><td>'+formatNumber(element.Monto1)+'</td><td>'+formatNumber(element.Monto2)+'</td><td>'+formatNumber(element.Monto3)+'</td><td>'+formatNumber(element.Monto4)+'</td><td>'+formatNumber(element.Monto5)+'</td><td>'+formatNumber(element.Monto6)+'</td><td>'+formatNumber(element.Total)+'</td><td>'+Math.round((element.Total*100)/total)+'%</td></tr>';
             }
@@ -790,12 +895,14 @@ function fillReporteOrdenes(data){
         tableBody = '<tbody>'
         data.forEach(element =>{
             if(element.Tipo == 'TAZ'){
-                tableBody += '<tr><td><strong>'+element.Tipo+'</strong></br>TAZ(%)</td><td>'+new Intl.NumberFormat('en-US').format(element.Total1)+'</br>'+Math.round((element.Total1*100)/s1)+'%</td><td>'+new Intl.NumberFormat('en-US').format(element.Total2)+'</br>'+Math.round((element.Total2*100)/s2)+'%</td><td>'+new Intl.NumberFormat('en-US').format(element.Total3)+'</br>'+Math.round((element.Total3*100)/s3)+'%</td><td>'+new Intl.NumberFormat('en-US').format(element.Total4)+'</br>'+Math.round((element.Total4*100)/s4)+'%</td><td>'+new Intl.NumberFormat('en-US').format(element.Total5)+'</br>'+Math.round((element.Total5*100)/s5)+'%</td><td>'+new Intl.NumberFormat('en-US').format(element.Total6)+'</br>'+Math.round((element.Total6*100)/s6)+'%</td><td>'+new Intl.NumberFormat('en-US').format(element.Total)+'</br>'+Math.round((element.Total*100)/total)+'%</td><td>'+Math.round((element.Total*100)/total)+'%</td></tr>';
+                
+                tableBody += '<tr><td><strong>'+element.Tipo+'</strong></td><td align="center">'+new Intl.NumberFormat('en-US').format(element.Total1)+'</td><td align="center">'+new Intl.NumberFormat('en-US').format(element.Total2)+'</td><td align="center">'+new Intl.NumberFormat('en-US').format(element.Total3)+'</td><td align="center">'+new Intl.NumberFormat('en-US').format(element.Total4)+'</td><td align="center">'+new Intl.NumberFormat('en-US').format(element.Total5)+'</td><td align="center">'+new Intl.NumberFormat('en-US').format(element.Total6)+'</td><td align="center">'+new Intl.NumberFormat('en-US').format(element.Total)+'</td><td align="center">'+Math.round((element.Total*100)/total)+'%</td></tr>';
+                tableBody += '<tr><td><strong>TAZ(%)</strong></td><td align="center">'+Math.round((element.Total1*100)/s1)+'%</td><td align="center">'+Math.round((element.Total2*100)/s2)+'%</td><td align="center">'+Math.round((element.Total3*100)/s3)+'%</td><td align="center">'+Math.round((element.Total4*100)/s4)+'%</td><td align="center">'+Math.round((element.Total5*100)/s5)+'%</td><td align="center">'+Math.round((element.Total6*100)/s6)+'%</td><td align="center">'+Math.round((element.Total*100)/total)+'%</td><td></td></tr>';
             }else{
-                tableBody += '<tr><td><strong>'+element.Tipo+'</strong></td><td>'+new Intl.NumberFormat('en-US').format(element.Total1)+'</td><td>'+new Intl.NumberFormat('en-US').format(element.Total2)+'</td><td>'+new Intl.NumberFormat('en-US').format(element.Total3)+'</td><td>'+new Intl.NumberFormat('en-US').format(element.Total4)+'</td><td>'+new Intl.NumberFormat('en-US').format(element.Total5)+'</td><td>'+new Intl.NumberFormat('en-US').format(element.Total6)+'</td><td>'+new Intl.NumberFormat('en-US').format(element.Total)+'</td><td>'+Math.round((element.Total*100)/total)+'%</td></tr>';
+                tableBody += '<tr><td><strong>'+element.Tipo+'</strong></td><td align="center">'+new Intl.NumberFormat('en-US').format(element.Total1)+'</td><td align="center">'+new Intl.NumberFormat('en-US').format(element.Total2)+'</td><td align="center">'+new Intl.NumberFormat('en-US').format(element.Total3)+'</td><td align="center">'+new Intl.NumberFormat('en-US').format(element.Total4)+'</td><td align="center">'+new Intl.NumberFormat('en-US').format(element.Total5)+'</td><td align="center">'+new Intl.NumberFormat('en-US').format(element.Total6)+'</td><td align="center">'+new Intl.NumberFormat('en-US').format(element.Total)+'</td><td align="center">'+Math.round((element.Total*100)/total)+'%</td></tr>';
             }
         });
-        totalesTr = '<tr><td><strong>Totales</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(s1)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(s2)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(s3)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(s4)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(s5)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(s6)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(total)+'</strong></td><td><strong>100%</strong></td></tr>';
+        totalesTr = '<tr><td><strong>Totales</strong></td><td align="center"><strong>'+new Intl.NumberFormat('en-US').format(s1)+'</strong></td><td align="center"><strong>'+new Intl.NumberFormat('en-US').format(s2)+'</strong></td><td align="center"><strong>'+new Intl.NumberFormat('en-US').format(s3)+'</strong></td><td align="center"><strong>'+new Intl.NumberFormat('en-US').format(s4)+'</strong></td><td align="center"><strong>'+new Intl.NumberFormat('en-US').format(s5)+'</strong></td><td align="center"><strong>'+new Intl.NumberFormat('en-US').format(s6)+'</strong></td><td align="center"><strong>'+new Intl.NumberFormat('en-US').format(total)+'</strong></td><td align="center"><strong>100%</strong></td></tr>';
         tableBody += totalesTr + '</tbody>';
 
     }
