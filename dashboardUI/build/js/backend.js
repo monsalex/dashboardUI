@@ -38,7 +38,7 @@ function pickDateBackend(startdate, enddate, source){
         data: JSON.stringify(params),
         success: function(result){
             var data = JSON.parse(result.body);
-            //console.log(data); 
+            console.log(data); 
             //console.log(data.ordersByStat.length);
 
             //Charts
@@ -50,7 +50,7 @@ function pickDateBackend(startdate, enddate, source){
             //Tables
             //TableDropOff.drop();
             fillTables(data);
-            fillReporteSemanas(data);
+            
             
             //Tables
 
@@ -64,6 +64,12 @@ function pickDateBackend(startdate, enddate, source){
 
             //Monto por status
             fillMontoStatus(data);
+
+            //Monto por Semanas
+            fillReporteSemanas(data.amountByWeek);
+
+            //Ordenes por Semanas
+            fillReporteOrdenes(data.ordersByWeek);
         }
     })
 }
@@ -657,6 +663,52 @@ function fillTables(data){
 }
 
 function fillReporteSemanas(data){
+    var tableBody = '';
+    var tableHeader = '<thead><tr><th>Tipo Pago</th><th>Semana '+data[0]['Sem1'].substr(4)+'</th><th>Semana '+data[0]['Sem2'].substr(4)+'</th><th>Semana '+data[0]['Sem3'].substr(4)+'</th><th>Semana '+data[0]['Sem4'].substr(4)+'</th><th>Semana '+data[0]['Sem5'].substr(4)+'</th><th>Semana '+data[0]['Sem6'].substr(4)+'</th><th>Total</th><th>%</th></tr></thead>';
+    var totalesTr = '';
+    var s1 = 0;
+    var s2 = 0;
+    var s3 = 0;
+    var s4 = 0;
+    var s5 = 0;
+    var s6 = 0;
+    var p1 = 0;
+    var p2 = 0;
+    var p3 = 0;
+    var p4 = 0;
+    var p5 = 0;
+    var p6 = 0;
+    var total = 0;
+    var pctT = 0;
+    var pctE = 0;
+    var pctTaz = 0;
+    if(data){
+
+        data.forEach(element =>{
+            s1 += parseInt(element.Monto1);
+            s2 += parseInt(element.Monto2);
+            s3 += parseInt(element.Monto3);
+            s4 += parseInt(element.Monto4);
+            s5 += parseInt(element.Monto5);
+            s6 += parseInt(element.Monto6);
+            total += parseInt(element.Total);
+        });
+
+        tableBody = '<tbody>'
+        data.forEach(element =>{
+            if(element.Tipo == 'TAZ'){
+                tableBody += '<tr><td><strong>'+element.Tipo+'</strong></br>TAZ(%)</td><td>'+formatNumber(element.Monto1)+'</br>'+Math.round((element.Monto1*100)/s1)+'%</td><td>'+formatNumber(element.Monto2)+'</br>'+Math.round((element.Monto2*100)/s2)+'%</td><td>'+formatNumber(element.Monto3)+'</br>'+Math.round((element.Monto3*100)/s3)+'%</td><td>'+formatNumber(element.Monto4)+'</br>'+Math.round((element.Monto4*100)/s4)+'%</td><td>'+formatNumber(element.Monto5)+'</br>'+Math.round((element.Monto5*100)/s5)+'%</td><td>'+formatNumber(element.Monto6)+'</br>'+Math.round((element.Monto6*100)/s6)+'%</td><td>'+formatNumber(element.Total)+'</br>'+Math.round((element.Total*100)/total)+'%</td><td>'+Math.round((element.Total*100)/total)+'%</td></tr>';
+            }else{
+                tableBody += '<tr><td><strong>'+element.Tipo+'</strong></td><td>'+formatNumber(element.Monto1)+'</td><td>'+formatNumber(element.Monto2)+'</td><td>'+formatNumber(element.Monto3)+'</td><td>'+formatNumber(element.Monto4)+'</td><td>'+formatNumber(element.Monto5)+'</td><td>'+formatNumber(element.Monto6)+'</td><td>'+formatNumber(element.Total)+'</td><td>'+Math.round((element.Total*100)/total)+'%</td></tr>';
+            }
+        });
+        totalesTr = '<tr><td><strong>Totales</strong></td><td><strong>'+formatNumber(s1)+'</strong></td><td><strong>'+formatNumber(s2)+'</strong></td><td><strong>'+formatNumber(s3)+'</strong></td><td><strong>'+formatNumber(s4)+'</strong></td><td><strong>'+formatNumber(s5)+'</strong></td><td><strong>'+formatNumber(s6)+'</strong></td><td><strong>'+formatNumber(total)+'</strong></td><td><strong>100%</strong></td></tr>';
+        tableBody += totalesTr + '</tbody>';
+
+    }
+
+    $("#datatable-buttons_semanas").html(tableHeader+tableBody);
+
     $("#datatable-buttons_semanas").DataTable({}).destroy();
 
     var handleDataTableButtons = function () {
@@ -695,6 +747,99 @@ function fillReporteSemanas(data){
         return {
             init: function () {
                 handleDataTableButtons();
+            }
+        };
+    }();
+
+    
+    TableManageButtons.init();
+}
+
+function fillReporteOrdenes(data){
+    var tableBody = '';
+    var tableHeader = '<thead><tr><th>Tipo Pago</th><th>Semana '+data[0]['Sem1'].substr(4)+'</th><th>Semana '+data[0]['Sem2'].substr(4)+'</th><th>Semana '+data[0]['Sem3'].substr(4)+'</th><th>Semana '+data[0]['Sem4'].substr(4)+'</th><th>Semana '+data[0]['Sem5'].substr(4)+'</th><th>Semana '+data[0]['Sem6'].substr(4)+'</th><th>Total</th><th>%</th></tr></thead>';
+    var totalesTr = '';
+    var s1 = 0;
+    var s2 = 0;
+    var s3 = 0;
+    var s4 = 0;
+    var s5 = 0;
+    var s6 = 0;
+    var p1 = 0;
+    var p2 = 0;
+    var p3 = 0;
+    var p4 = 0;
+    var p5 = 0;
+    var p6 = 0;
+    var total = 0;
+    var pctT = 0;
+    var pctE = 0;
+    var pctTaz = 0;
+    if(data){
+
+        data.forEach(element =>{
+            s1 += parseInt(element.Total1);
+            s2 += parseInt(element.Total2);
+            s3 += parseInt(element.Total3);
+            s4 += parseInt(element.Total4);
+            s5 += parseInt(element.Total5);
+            s6 += parseInt(element.Total6);
+            total += parseInt(element.Total);
+        });
+
+        tableBody = '<tbody>'
+        data.forEach(element =>{
+            if(element.Tipo == 'TAZ'){
+                tableBody += '<tr><td><strong>'+element.Tipo+'</strong></br>TAZ(%)</td><td>'+new Intl.NumberFormat('en-US').format(element.Total1)+'</br>'+Math.round((element.Total1*100)/s1)+'%</td><td>'+new Intl.NumberFormat('en-US').format(element.Total2)+'</br>'+Math.round((element.Total2*100)/s2)+'%</td><td>'+new Intl.NumberFormat('en-US').format(element.Total3)+'</br>'+Math.round((element.Total3*100)/s3)+'%</td><td>'+new Intl.NumberFormat('en-US').format(element.Total4)+'</br>'+Math.round((element.Total4*100)/s4)+'%</td><td>'+new Intl.NumberFormat('en-US').format(element.Total5)+'</br>'+Math.round((element.Total5*100)/s5)+'%</td><td>'+new Intl.NumberFormat('en-US').format(element.Total6)+'</br>'+Math.round((element.Total6*100)/s6)+'%</td><td>'+new Intl.NumberFormat('en-US').format(element.Total)+'</br>'+Math.round((element.Total*100)/total)+'%</td><td>'+Math.round((element.Total*100)/total)+'%</td></tr>';
+            }else{
+                tableBody += '<tr><td><strong>'+element.Tipo+'</strong></td><td>'+new Intl.NumberFormat('en-US').format(element.Total1)+'</td><td>'+new Intl.NumberFormat('en-US').format(element.Total2)+'</td><td>'+new Intl.NumberFormat('en-US').format(element.Total3)+'</td><td>'+new Intl.NumberFormat('en-US').format(element.Total4)+'</td><td>'+new Intl.NumberFormat('en-US').format(element.Total5)+'</td><td>'+new Intl.NumberFormat('en-US').format(element.Total6)+'</td><td>'+new Intl.NumberFormat('en-US').format(element.Total)+'</td><td>'+Math.round((element.Total*100)/total)+'%</td></tr>';
+            }
+        });
+        totalesTr = '<tr><td><strong>Totales</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(s1)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(s2)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(s3)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(s4)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(s5)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(s6)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(total)+'</strong></td><td><strong>100%</strong></td></tr>';
+        tableBody += totalesTr + '</tbody>';
+
+    }
+
+    $("#datatable-buttons_Ordenes").html(tableHeader+tableBody);
+
+    $("#datatable-buttons_Ordenes").DataTable({}).destroy();
+
+    var handleDataTableButtons_Ordenes = function () {
+        if ($("#datatable-buttons_Ordenes").length) {
+            $("#datatable-buttons_Ordenes").DataTable({
+                dom: "Blfrtip",
+                buttons: [
+                    {
+                        extend: "copy",
+                        className: "btn-sm"
+                    },
+                    {
+                        extend: "csv",
+                        className: "btn-sm"
+                    },
+                    {
+                        extend: "excel",
+                        className: "btn-sm"
+                    },
+                    {
+                        extend: "pdfHtml5",
+                        className: "btn-sm"
+                    },
+                    {
+                        extend: "print",
+                        className: "btn-sm"
+                    },
+                ],
+                responsive: true
+            });
+        }
+    };
+
+    TableManageButtons = function () {
+        "use strict";
+        return {
+            init: function () {
+                handleDataTableButtons_Ordenes();
             }
         };
     }();
