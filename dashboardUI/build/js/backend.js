@@ -3,11 +3,11 @@ $(document).ready(function(){
 
     pickDateBackend(moment().format("YYYY-MM-DD"), moment().format("YYYY-MM-DD"), 0);
 
-    $(".iHiddeShow").click(function(){
+    /*$(".iHiddeShow").click(function(){
         $(this).toggleClass("fa-plus-circle fa-close");
         
         $("#divBelow").toggle();
-    });
+    });*/
 });
 
 function pickDateBackend(startdate, enddate, source){
@@ -109,10 +109,6 @@ function fillKPIs(data){
 }
 
 function fillCharts(data, enddate){
-    //echart Line
-    //var end = moment(enddate+ " 23:59:59").format("YYYY-MM-DD HH:MM:SS") 
-    //console.log(moment(enddate));
-
 
     var arrPagadas = [];
     var arrNoPagadas = [];
