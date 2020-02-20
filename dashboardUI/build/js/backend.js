@@ -78,9 +78,10 @@ function pickDateBackend(startdate, enddate, source){
 }
 
 function fillTazBines(data){
-    const arrData = [{label: 'Sin registros', value:0}];
+    var arrData = [{label: 'Sin registros', value:0}];
     
     if(data){
+         arrData = [];
         data.forEach(element=>{
             //console.log(element.paymentType);
             arrData.push({label: element.paymentType, value: element.ordersNumber});
@@ -785,8 +786,8 @@ function fillReporteSemanas(data){
     var pctT = 0;
     var pctE = 0;
     var pctTaz = 0;
+    
     if(data){
-
         data.forEach(element =>{
             s1 += parseInt(element.Monto1);
             s2 += parseInt(element.Monto2);
@@ -812,9 +813,10 @@ function fillReporteSemanas(data){
 
     }
 
-    $("#datatable-buttons_semanas").html(tableHeader+tableBody);
+    
 
     $("#datatable-buttons_semanas").DataTable({}).destroy();
+    $("#datatable-buttons_semanas").html(tableHeader+tableBody);
 
     var handleDataTableButtons = function () {
         if ($("#datatable-buttons_semanas").length) {
@@ -907,9 +909,10 @@ function fillReporteOrdenes(data){
 
     }
 
-    $("#datatable-buttons_Ordenes").html(tableHeader+tableBody);
+    
 
     $("#datatable-buttons_Ordenes").DataTable({}).destroy();
+    $("#datatable-buttons_Ordenes").html(tableHeader+tableBody);
 
     var handleDataTableButtons_Ordenes = function () {
         if ($("#datatable-buttons_Ordenes").length) {
