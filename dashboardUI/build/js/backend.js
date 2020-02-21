@@ -38,7 +38,7 @@ function pickDateBackend(startdate, enddate, source){
         data: JSON.stringify(params),
         success: function(result){
             var data = JSON.parse(result.body);
-            //console.log(data); 
+            console.log(data); 
             //console.log(data.ordersByStat.length);
 
             //Charts
@@ -48,12 +48,12 @@ function pickDateBackend(startdate, enddate, source){
             //Charts
 
             //Tables
-            //TableDropOff.drop();
             fillTables(data);
             
             fillTablesCategorias(data.ordersByCategory);
             
-            //Tables
+            //Tables tiendas
+            fillTablesStore(data);
 
             //Charts
             fillCharts(data.ordersDateBefore, enddate);
@@ -627,6 +627,53 @@ function cambiarNombreStatus(statusName){
         default:
             return ['Otro', 'grey'];
     }
+}
+
+function fillTablesStore(data){
+    $("#datatable-buttons_stores").DataTable({}).destroy();
+
+        var handleDataTableButtons = function () {
+            if ($("#datatable-buttons_stores").length) {
+                $("#datatable-buttons_stores").DataTable({
+                    dom: "Blfrtip",
+                    buttons: [
+                        {
+                            extend: "copy",
+                            className: "btn-sm"
+                        },
+                        {
+                            extend: "csv",
+                            className: "btn-sm"
+                        },
+                        {
+                            extend: "excel",
+                            className: "btn-sm"
+                        },
+                        {
+                            extend: "pdfHtml5",
+                            className: "btn-sm"
+                        },
+                        {
+                            extend: "print",
+                            className: "btn-sm"
+                        },
+                    ],
+                    responsive: true
+                });
+            }
+        };
+    
+        TableManageButtons = function () {
+            "use strict";
+            return {
+                init: function () {
+                    handleDataTableButtons();
+                }
+            };
+        }();
+
+        
+        TableManageButtons.init();
 }
 
 function fillTablesCategorias(data){
