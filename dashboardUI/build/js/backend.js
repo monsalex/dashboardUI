@@ -630,7 +630,33 @@ function cambiarNombreStatus(statusName){
 }
 
 function fillTablesStore(data){
+    var tableBody = '';
+    var tableHeader = '';
+    var cont = 1;
+
+    if (data.amountStoresByWeek && data.weeksByDate){
+        const arrs = {
+            arrSemanas : data.weeksByDate,
+            arrMontos : data.amountStoresByWeek
+        } 
+        tableHeader = '<thead><tr>';
+        arrs['arrSemanas'].forEach(element=>{
+            tableHeader += '<th>No.</th><th>Tienda</th><th>'+element.Sem1+'</th><th>'+element.Sem2+'</th><th>'+element.Sem3+'</th><th>'+element.Sem4+'</th><th>'+element.Sem5+'</th><th>'+element.Sem6+'</th><th>Total</th>';
+        });
+        
+        tableHeader += '</tr></thead>';
+        tableBody = '<tbody>'
+
+        arrs['arrMontos'].forEach(element =>{
+            tableBody += '<tr><td align="center">'+ cont +'</td><td>'+ element.Street +'</td><td>'+ formatNumber(element.Monto1) +'</td><td>'+ formatNumber(element.Monto2) +'</td><td>'+ formatNumber(element.Monto3) +'</td><td>'+ formatNumber(element.Monto4) +'</td><td>'+ formatNumber(element.Monto5) +'</td><td>'+ formatNumber(element.Monto6) +'</td><td>'+ formatNumber(element.Total) +'</td></tr>';
+            cont++;
+        });
+            
+        
+        tableBody += '</tbody>'
+
     $("#datatable-buttons_stores").DataTable({}).destroy();
+    $("#datatable-buttons_stores").html(tableHeader + tableBody);
 
         var handleDataTableButtons = function () {
             if ($("#datatable-buttons_stores").length) {
@@ -674,6 +700,7 @@ function fillTablesStore(data){
 
         
         TableManageButtons.init();
+    }
 }
 
 function fillTablesCategorias(data){
