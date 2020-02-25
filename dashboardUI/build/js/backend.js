@@ -38,7 +38,7 @@ function pickDateBackend(startdate, enddate, source){
         data: JSON.stringify(params),
         success: function(result){
             var data = JSON.parse(result.body);
-            console.log(data); 
+            //console.log(data); 
             //console.log(data.ordersByStat.length);
 
             //Charts
@@ -641,7 +641,7 @@ function fillTablesStore(data){
         } 
         tableHeader = '<thead><tr>';
         arrs['arrSemanas'].forEach(element=>{
-            tableHeader += '<th>No.</th><th>Tienda</th><th>'+element.Sem1+'</th><th>'+element.Sem2+'</th><th>'+element.Sem3+'</th><th>'+element.Sem4+'</th><th>'+element.Sem5+'</th><th>'+element.Sem6+'</th><th>Total</th>';
+            tableHeader += '<th>No.</th><th>Tienda</th><th>Semana '+element.Sem1.substr(4)+'</th><th>Semana '+element.Sem2.substr(4)+'</th><th>Semana '+element.Sem3.substr(4)+'</th><th>Semana '+element.Sem4.substr(4)+'</th><th>Semana '+element.Sem5.substr(4)+'</th><th>Semana '+element.Sem6.substr(4)+'</th><th>Total</th>';
         });
         
         tableHeader += '</tr></thead>';
