@@ -641,14 +641,14 @@ function fillTablesStore(data){
         } 
         tableHeader = '<thead><tr>';
         arrs['arrSemanas'].forEach(element=>{
-            tableHeader += '<th>No.</th><th>Tienda</th><th>Semana '+element.Sem1.substr(4)+'</th><th>Semana '+element.Sem2.substr(4)+'</th><th>Semana '+element.Sem3.substr(4)+'</th><th>Semana '+element.Sem4.substr(4)+'</th><th>Semana '+element.Sem5.substr(4)+'</th><th>Semana '+element.Sem6.substr(4)+'</th><th>Total</th>';
+            tableHeader += '<th>Tienda</th><th>Semana '+element.Sem1.substr(4)+'</th><th>Semana '+element.Sem2.substr(4)+'</th><th>Semana '+element.Sem3.substr(4)+'</th><th>Semana '+element.Sem4.substr(4)+'</th><th>Semana '+element.Sem5.substr(4)+'</th><th>Semana '+element.Sem6.substr(4)+'</th><th>Total</th>';
         });
         
         tableHeader += '</tr></thead>';
         tableBody = '<tbody>'
 
         arrs['arrMontos'].forEach(element =>{
-            tableBody += '<tr><td align="center">'+ cont +'</td><td>'+ element.Street +'</td><td>'+ formatNumber(element.Monto1) +'</td><td>'+ formatNumber(element.Monto2) +'</td><td>'+ formatNumber(element.Monto3) +'</td><td>'+ formatNumber(element.Monto4) +'</td><td>'+ formatNumber(element.Monto5) +'</td><td>'+ formatNumber(element.Monto6) +'</td><td>'+ formatNumber(element.Total) +'</td></tr>';
+            tableBody += '<tr><td>'+ element.Street +'</td><td>'+ formatNumber(element.Monto1) +'</td><td>'+ formatNumber(element.Monto2) +'</td><td>'+ formatNumber(element.Monto3) +'</td><td>'+ formatNumber(element.Monto4) +'</td><td>'+ formatNumber(element.Monto5) +'</td><td>'+ formatNumber(element.Monto6) +'</td><td>'+ formatNumber(element.Total) +'</td></tr>';
             cont++;
         });
             
