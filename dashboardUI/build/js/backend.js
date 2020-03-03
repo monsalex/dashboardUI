@@ -38,7 +38,7 @@ function pickDateBackend(startdate, enddate, source){
         data: JSON.stringify(params),
         success: function(result){
             var data = JSON.parse(result.body);
-            console.log(data); 
+            //console.log(data); 
             //console.log(data.ordersByStat.length);
 
             //Charts
@@ -80,13 +80,31 @@ function pickDateBackend(startdate, enddate, source){
 }
 
 function fillCash(data){
-
+    //console.log(data);
     var arrAxisWeek = [];
+    var arrAmountDataPayed =[];
+    var arrNumDataPayed = []; 
+    var arrAmountDataNotPayed =[];
+    var arrNumDataNotPayed = []; 
+    var s1 = 0;
+    var s2 = 0;
+    var s3 = 0;
+    var s4 = 0;
+    var s5 = 0;
+    var s6 = 0;
+    var total = 0;
+    var n1 = 0;
+    var n2 = 0;
+    var n3 = 0;
+    var n4 = 0;
+    var n5 = 0;
+    var n6 = 0;
+    var totalNum = 0;
 
-    if (data.amountStoresByWeek && data.weeksByDate){
+    if (data.paymentCashByWeek && data.weeksByDate){
         const arrs = {
             arrSemanas : data.weeksByDate,
-            arrMontos : data.amountStoresByWeek
+            arrPayments : data.paymentCashByWeek
         } 
 
         
@@ -101,6 +119,56 @@ function fillCash(data){
             
         });
         
+        arrs['arrPayments'].forEach(element=>{
+            if(element.Status == 'Pagadas'){
+                arrAmountDataPayed.push(element.Monto1);
+                arrAmountDataPayed.push(element.Monto2);
+                arrAmountDataPayed.push(element.Monto3);
+                arrAmountDataPayed.push(element.Monto4);
+                arrAmountDataPayed.push(element.Monto5);
+                arrAmountDataPayed.push(element.Monto6);
+
+                arrNumDataPayed.push(element.Num1);
+                arrNumDataPayed.push(element.Num2);
+                arrNumDataPayed.push(element.Num3);
+                arrNumDataPayed.push(element.Num4);
+                arrNumDataPayed.push(element.Num5);
+                arrNumDataPayed.push(element.Num6);
+            }
+
+            if(element.Status == 'No pagadas'){
+                arrAmountDataNotPayed.push(element.Monto1);
+                arrAmountDataNotPayed.push(element.Monto2);
+                arrAmountDataNotPayed.push(element.Monto3);
+                arrAmountDataNotPayed.push(element.Monto4);
+                arrAmountDataNotPayed.push(element.Monto5);
+                arrAmountDataNotPayed.push(element.Monto6);
+
+                arrNumDataNotPayed.push(element.Num1);
+                arrNumDataNotPayed.push(element.Num2);
+                arrNumDataNotPayed.push(element.Num3);
+                arrNumDataNotPayed.push(element.Num4);
+                arrNumDataNotPayed.push(element.Num5);
+                arrNumDataNotPayed.push(element.Num6);
+            }
+
+            s1 += parseInt(element.Monto1);
+            s2 += parseInt(element.Monto2);
+            s3 += parseInt(element.Monto3);
+            s4 += parseInt(element.Monto4);
+            s5 += parseInt(element.Monto5);
+            s6 += parseInt(element.Monto6);
+            total += parseInt(element.TotalMonto);
+            
+            n1 += parseInt(element.Num1);
+            n2 += parseInt(element.Num2);
+            n3 += parseInt(element.Num3);
+            n4 += parseInt(element.Num4);
+            n5 += parseInt(element.Num5);
+            n6 += parseInt(element.Num6);
+            totalNum += parseInt(element.TotalOrdenes);
+
+        });
 
         if ($('#mainb_cash').length) {
 
@@ -131,7 +199,7 @@ function fillCash(data){
                 series: [{
                     name: 'Pagadas Q',
                     type: 'bar',
-                    data: [2000, 4900, 7000, 23200, 25600, 76700],
+                    data: arrAmountDataPayed,//[2000, 4900, 7000, 23200, 25600, 76700],
                     
                     markLine: {
                         data: [{
@@ -141,7 +209,7 @@ function fillCash(data){
                 }, {
                     name: 'No pagadas Q',
                     type: 'bar',
-                    data: [2600, 5900, 9000, 26400, 28700, 70700],
+                    data: arrAmountDataNotPayed,//[2600, 5900, 9000, 26400, 28700, 70700],
                
                     markLine: {
                         data: [{
@@ -154,7 +222,7 @@ function fillCash(data){
         }
 
         if ($('#echart_bar_horizontal_cash').length) {
-            console.log(arrAxisWeek);
+            //console.log(arrAxisWeek);
             arrAxisWeek = [];
             arrs['arrSemanas'].forEach(element=>{
                 arrAxisWeek.push(element.Sem1.substr(4));
@@ -201,11 +269,11 @@ function fillCash(data){
                 series: [{
                     name: 'Pagadas',
                     type: 'bar',
-                    data: [182, 23, 290, 104, 131, 630]
+                    data: arrNumDataPayed//[182, 23, 290, 104, 131, 630]
                 }, {
                     name: 'No pagadas',
                     type: 'bar',
-                    data: [193, 23, 31, 12, 134, 681]
+                    data: arrNumDataNotPayed//[193, 23, 31, 12, 134, 681]
                 }]
             });
     
@@ -214,9 +282,29 @@ function fillCash(data){
 
         /*** Tablas*/
         /***** Montos */
+    
+        var tableHeader = ''
+        var totalesTr = ''
+        var tableBody = ''
+        
+        tableHeader = '<thead><tr>';
+        arrs['arrSemanas'].forEach(element=>{
+            tableHeader += '<th>Efectivo</th><th>Sem '+element.Sem1.substr(4)+'</th><th>Sem '+element.Sem2.substr(4)+'</th><th>Sem '+element.Sem3.substr(4)+'</th><th>Sem '+element.Sem4.substr(4)+'</th><th>Sem '+element.Sem5.substr(4)+'</th><th>Sem '+element.Sem6.substr(4)+'</th><th>Total</th><th>Pct</th>';
+        });
 
-    $("#datatable-buttons_orderCash").DataTable({}).destroy();
-    //$("#datatable-buttons_orderCash").html(tableHeader + tableBody);
+        tableHeader += '</tr></thead>';
+        tableBody = '<tbody>'
+
+        arrs['arrPayments'].forEach(element =>{
+            tableBody += '<tr><td>'+ element.Status +'</td><td>'+ formatNumber(element.Monto1) +'</td><td>'+ formatNumber(element.Monto2) +'</td><td>'+ formatNumber(element.Monto3) +'</td><td>'+ formatNumber(element.Monto4) +'</td><td>'+ formatNumber(element.Monto5) +'</td><td>'+ formatNumber(element.Monto6) +'</td><td>'+ formatNumber(element.TotalMonto) +'</td><td>'+Math.round((element.TotalMonto/total)*100)+'%</td></tr>';
+        });
+            
+        totalesTr = '<tr><td><strong>Totales</strong></td><td><strong>'+formatNumber(s1)+'</strong></td><td><strong>'+formatNumber(s2)+'</strong></td><td><strong>'+formatNumber(s3)+'</strong></td><td><strong>'+formatNumber(s4)+'</strong></td><td><strong>'+formatNumber(s5)+'</strong></td><td><strong>'+formatNumber(s6)+'</strong></td><td><strong>'+formatNumber(total)+'</strong></td><td><strong>100%</strong></td></tr>';
+
+        tableBody += totalesTr + '</tbody>'
+
+        $("#datatable-buttons_orderCash").DataTable({}).destroy();
+        $("#datatable-buttons_orderCash").html(tableHeader + tableBody);
 
         var handleDataTableButtons = function () {
             if ($("#datatable-buttons_orderCash").length) {
@@ -263,8 +351,27 @@ function fillCash(data){
 
 
         /****** Ordenes */
-    $("#datatable-buttons_orderNum").DataTable({}).destroy();
-    //$("#datatable-buttons_orderCash").html(tableHeader + tableBody);
+
+        var tableHeader = ''
+        
+        tableHeader = '<thead><tr>';
+        arrs['arrSemanas'].forEach(element=>{
+            tableHeader += '<th>Efectivo</th><th>Sem '+element.Sem1.substr(4)+'</th><th>Sem '+element.Sem2.substr(4)+'</th><th>Sem '+element.Sem3.substr(4)+'</th><th>Sem '+element.Sem4.substr(4)+'</th><th>Sem '+element.Sem5.substr(4)+'</th><th>Sem '+element.Sem6.substr(4)+'</th><th>Total</th><th>Pct</th>';
+        });
+
+        tableHeader += '</tr></thead>';
+        tableBody = '<tbody>'
+
+        arrs['arrPayments'].forEach(element =>{
+            tableBody += '<tr><td>'+ element.Status +'</td><td>'+ new Intl.NumberFormat('en-US').format(element.Num1) +'</td><td>'+ new Intl.NumberFormat('en-US').format(element.Num2) +'</td><td>'+ new Intl.NumberFormat('en-US').format(element.Num3) +'</td><td>'+ new Intl.NumberFormat('en-US').format(element.Num4) +'</td><td>'+ new Intl.NumberFormat('en-US').format(element.Num5) +'</td><td>'+ new Intl.NumberFormat('en-US').format(element.Num6) +'</td><td>'+ new Intl.NumberFormat('en-US').format(element.TotalOrdenes) +'</td><td>'+Math.round((element.TotalOrdenes/totalNum)*100)+'%</td></tr>';
+        });
+            
+        totalesTr = '<tr><td><strong>Totales</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(n1)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(n2)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(n3)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(n4)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(n5)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(n6)+'</strong></td><td><strong>'+new Intl.NumberFormat('en-US').format(totalNum)+'</strong></td><td><strong>100%</strong></td></tr>';
+
+        tableBody += totalesTr + '</tbody>'
+
+        $("#datatable-buttons_orderNum").DataTable({}).destroy();
+        $("#datatable-buttons_orderNum").html(tableHeader + tableBody);
 
         var handleDataTableButtons = function () {
             if ($("#datatable-buttons_orderNum").length) {
