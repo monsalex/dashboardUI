@@ -38,7 +38,7 @@ function pickDateBackend(startdate, enddate, source){
         data: JSON.stringify(params),
         success: function(result){
             var data = JSON.parse(result.body);
-            //console.log(data); 
+            console.log(data); 
             //console.log(data.ordersByStat.length);
 
             //Charts
@@ -81,77 +81,233 @@ function pickDateBackend(startdate, enddate, source){
 
 function fillCash(data){
 
-    if ($('#mainb_cash').length) {
+    var arrAxisWeek = [];
 
-        var echartBar = echarts.init(document.getElementById('mainb_cash'), theme);
+    if (data.amountStoresByWeek && data.weeksByDate){
+        const arrs = {
+            arrSemanas : data.weeksByDate,
+            arrMontos : data.amountStoresByWeek
+        } 
 
-        echartBar.setOption({
-            title: {
-                text: '',//'Graph title',
-                subtext: ''//'Graph Sub-text'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data: ['Pagadas', 'No pagadas']
-            },
-            toolbox: {
-                show: false
-            },
-            calculable: false,
-            xAxis: [{
-                type: 'category',
-                data: ['1?', '2?', '3?', '4?', '5?', '6?', '7?', '8?', '9?', '10?', '11?', '12?']
-            }],
-            yAxis: [{
-                type: 'value'
-            }],
-            series: [{
-                name: 'Pagadas',
-                type: 'bar',
-                data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
-                markPoint: {
-                    data: [{
-                        type: 'max',
-                        name: '???'
-                    }, {
-                        type: 'min',
-                        name: '???'
-                    }]
-                },
-                markLine: {
-                    data: [{
-                        type: 'average',
-                        name: '???'
-                    }]
-                }
-            }, {
-                name: 'No pagadas',
-                type: 'bar',
-                data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
-                markPoint: {
-                    data: [{
-                        name: 'sales',
-                        value: 182.2,
-                        xAxis: 7,
-                        yAxis: 183,
-                    }, {
-                        name: 'purchases',
-                        value: 2.3,
-                        xAxis: 11,
-                        yAxis: 3
-                    }]
-                },
-                markLine: {
-                    data: [{
-                        type: 'average',
-                        name: '???'
-                    }]
-                }
-            }]
+        
+
+        arrs['arrSemanas'].forEach(element=>{
+            arrAxisWeek.push('Sem ' + element.Sem1.substr(4));
+            arrAxisWeek.push('Sem ' + element.Sem2.substr(4));
+            arrAxisWeek.push('Sem ' + element.Sem3.substr(4));
+            arrAxisWeek.push('Sem ' + element.Sem4.substr(4));
+            arrAxisWeek.push('Sem ' + element.Sem5.substr(4));
+            arrAxisWeek.push('Sem ' + element.Sem6.substr(4));
+            
         });
+        
 
+        if ($('#mainb_cash').length) {
+
+            var echartBar = echarts.init(document.getElementById('mainb_cash'), theme);
+
+            echartBar.setOption({
+                title: {
+                    text: '',//'Graph title',
+                    subtext: ''//'Graph Sub-text'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['Pagadas Q', 'No pagadas Q']
+                },
+                toolbox: {
+                    show: false
+                },
+                calculable: false,
+                xAxis: [{
+                    type: 'category',
+                    data: arrAxisWeek//['1?', '2?', '3?', '4?', '5?', '6?', '7?', '8?', '9?', '10?', '11?', '12?']
+                }],
+                yAxis: [{
+                    type: 'value'
+                }],
+                series: [{
+                    name: 'Pagadas Q',
+                    type: 'bar',
+                    data: [2000, 4900, 7000, 23200, 25600, 76700],
+                    
+                    markLine: {
+                        data: [{
+                            type: 'average'
+                        }]
+                    }
+                }, {
+                    name: 'No pagadas Q',
+                    type: 'bar',
+                    data: [2600, 5900, 9000, 26400, 28700, 70700],
+               
+                    markLine: {
+                        data: [{
+                            type: 'average'
+                        }]
+                    }
+                }]
+            });
+
+        }
+
+        if ($('#echart_bar_horizontal_cash').length) {
+            console.log(arrAxisWeek);
+            arrAxisWeek = [];
+            arrs['arrSemanas'].forEach(element=>{
+                arrAxisWeek.push(element.Sem1.substr(4));
+                arrAxisWeek.push(element.Sem2.substr(4));
+                arrAxisWeek.push(element.Sem3.substr(4));
+                arrAxisWeek.push(element.Sem4.substr(4));
+                arrAxisWeek.push(element.Sem5.substr(4));
+                arrAxisWeek.push(element.Sem6.substr(4));
+                
+            });
+
+            var echartBar = echarts.init(document.getElementById('echart_bar_horizontal_cash'), theme);
+    
+            echartBar.setOption({
+                title: {
+                    text: '',//'Bar Graph',
+                    subtext: ''//'Graph subtitle'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    x: 100,
+                    data: ['Pagadas', 'No pagadas']
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        saveAsImage: {
+                            show: false,
+                            title: "Save Image"
+                        }
+                    }
+                },
+                calculable: true,
+                xAxis: [{
+                    type: 'value',
+                    boundaryGap: [0, 0.01]
+                }],
+                yAxis: [{
+                    type: 'category',
+                    data: arrAxisWeek//['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+                }],
+                series: [{
+                    name: 'Pagadas',
+                    type: 'bar',
+                    data: [182, 23, 290, 104, 131, 630]
+                }, {
+                    name: 'No pagadas',
+                    type: 'bar',
+                    data: [193, 23, 31, 12, 134, 681]
+                }]
+            });
+    
+        }
+
+
+        /*** Tablas*/
+        /***** Montos */
+
+    $("#datatable-buttons_orderCash").DataTable({}).destroy();
+    //$("#datatable-buttons_orderCash").html(tableHeader + tableBody);
+
+        var handleDataTableButtons = function () {
+            if ($("#datatable-buttons_orderCash").length) {
+                $("#datatable-buttons_orderCash").DataTable({
+                    dom: "Blfrtip",
+                    buttons: [
+                        {
+                            extend: "copy",
+                            className: "btn-sm"
+                        },
+                        {
+                            extend: "csv",
+                            className: "btn-sm"
+                        },
+                        {
+                            extend: "excel",
+                            className: "btn-sm"
+                        },
+                        {
+                            extend: "pdfHtml5",
+                            className: "btn-sm"
+                        },
+                        {
+                            extend: "print",
+                            className: "btn-sm"
+                        },
+                    ],
+                    responsive: true
+                });
+            }
+        };
+    
+        TableManageButtons = function () {
+            "use strict";
+            return {
+                init: function () {
+                    handleDataTableButtons();
+                }
+            };
+        }();
+
+        
+        TableManageButtons.init();
+
+
+        /****** Ordenes */
+    $("#datatable-buttons_orderNum").DataTable({}).destroy();
+    //$("#datatable-buttons_orderCash").html(tableHeader + tableBody);
+
+        var handleDataTableButtons = function () {
+            if ($("#datatable-buttons_orderNum").length) {
+                $("#datatable-buttons_orderNum").DataTable({
+                    dom: "Blfrtip",
+                    buttons: [
+                        {
+                            extend: "copy",
+                            className: "btn-sm"
+                        },
+                        {
+                            extend: "csv",
+                            className: "btn-sm"
+                        },
+                        {
+                            extend: "excel",
+                            className: "btn-sm"
+                        },
+                        {
+                            extend: "pdfHtml5",
+                            className: "btn-sm"
+                        },
+                        {
+                            extend: "print",
+                            className: "btn-sm"
+                        },
+                    ],
+                    responsive: true
+                });
+            }
+        };
+    
+        TableManageButtons = function () {
+            "use strict";
+            return {
+                init: function () {
+                    handleDataTableButtons();
+                }
+            };
+        }();
+
+        
+        TableManageButtons.init();
     }
 }
 
