@@ -367,7 +367,7 @@
             <div class="col-md-12 col-sm-12 ">
               <div class="x_panel">
                 <div class="x_title">
-                  <h2>Ordenes vendidas por categoria <small></small></h2>
+                  <h2>Monto total por categoría <small></small></h2>
                   <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
@@ -391,6 +391,59 @@
                       The Buttons extension for DataTables provides a common set of options, API methods and styling to display buttons on a page that will interact with a DataTable. The core library provides the based framework upon which plug-ins can built.
                     </!--p-->
                         <table id="datatable-buttons_categorias" class="table table-striped table-bordered" style="width:100%">
+                          <thead>
+                            <tr>
+                              <th>Categoría</th>
+                              <th>Cantidad Productos</th>
+                              <th>Monto Facturado</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="clearfix"></div>
+          <div class="row">
+            <!-- Otro reporte -->
+            <div class="col-md-12 col-sm-12 ">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h2>Ordenes totales por categoría <small></small></h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <!--li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      </!--li-->
+                    <!--li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </!--li-->
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="card-box table-responsive">
+                        <!--p class="text-muted font-13 m-b-30">
+                      The Buttons extension for DataTables provides a common set of options, API methods and styling to display buttons on a page that will interact with a DataTable. The core library provides the based framework upon which plug-ins can built.
+                    </!--p-->
+                        <table id="datatable-buttons_categoriasOrdenes" class="table table-striped table-bordered" style="width:100%">
                           <thead>
                             <tr>
                               <th>Categoría</th>
@@ -462,7 +515,7 @@
   <script src="../build/js/custom.min.js"></script>
 
   <!-- Calls to backend -->>
-  <script src="../build/js/backend.min.js"></script>
+  <script src="../build/js/backendPedidos.js"></script>
 
 </body>
 

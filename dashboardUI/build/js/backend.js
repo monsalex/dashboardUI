@@ -1,6 +1,7 @@
 $(document).ready(function(){
     //init_chart_doughnut();
-
+    var data;
+    console.log(data);
     pickDateBackend(moment().format("YYYY-MM-DD"), moment().format("YYYY-MM-DD"), 0);
 
     /*$(".iHiddeShow").click(function(){
@@ -37,8 +38,8 @@ function pickDateBackend(startdate, enddate, source){
         dataType: 'json',
         data: JSON.stringify(params),
         success: function(result){
-            var data = JSON.parse(result.body);
-            //console.log(data); 
+             data = JSON.parse(result.body);
+            console.log(data); 
             //console.log(data.ordersByStat.length);
 
             //Charts
@@ -48,9 +49,9 @@ function pickDateBackend(startdate, enddate, source){
             //Charts
 
             //Tables
-            fillTables(data);
+            //fillTables(data);
             
-            fillTablesCategorias(data.ordersByCategory);
+            //fillTablesCategorias(data.ordersByCategory);
             
             //Tables tiendas
             fillTablesStore(data);
@@ -1042,143 +1043,6 @@ function fillTablesStore(data){
         
         TableManageButtons.init();
     }
-}
-
-function fillTablesCategorias(data){
-    var tableBody = '';
-    var tableHeader = '';
-
-    if(data){
-        //fillTables(data.ordersByBrand);
-        tableHeader = '<thead><tr><th>Categorias</th><th>Cantidad Productos</th><th>Monto Facturado</th></tr></thead>';
-        tableBody = '<tbody>'
-
-        data.forEach(element =>{
-            tableBody += '<tr><td>'+ element.Categoria +'</td><td>'+ element.ArticulosFacturados +'</td><td>'+ formatNumber(element.MontoFacturado) +'</td></tr>';
-        })
-            
-        
-        tableBody += '</tbody>'
-        
-
-        
-        //console.log(tableHeader+tableBody);
-        $('#datatable-buttons_categorias').html(tableHeader + tableBody);
-
-        $("#datatable-buttons_categorias").DataTable({}).destroy();
-
-        var handleDataTableButtons = function () {
-            if ($("#datatable-buttons_categorias").length) {
-                $("#datatable-buttons_categorias").DataTable({
-                    dom: "Blfrtip",
-                    buttons: [
-                        {
-                            extend: "copy",
-                            className: "btn-sm"
-                        },
-                        {
-                            extend: "csv",
-                            className: "btn-sm"
-                        },
-                        {
-                            extend: "excel",
-                            className: "btn-sm"
-                        },
-                        {
-                            extend: "pdfHtml5",
-                            className: "btn-sm"
-                        },
-                        {
-                            extend: "print",
-                            className: "btn-sm"
-                        },
-                    ],
-                    responsive: true
-                });
-            }
-        };
-    
-        TableManageButtons = function () {
-            "use strict";
-            return {
-                init: function () {
-                    handleDataTableButtons();
-                }
-            };
-        }();
-
-        
-        TableManageButtons.init();
-
-    }
-        
-}
-
-function fillTables(data){
-    var tableBody = '';
-    var tableHeader = '';
-
-    if(data.ordersByBrand != 'undefined' && data.ordersByBrand != null){
-        //fillTables(data.ordersByBrand);
-        tableHeader = '<thead><tr><th>Marca</th><th>Cantidad Productos</th><th>Monto</th></tr></thead>';
-        tableBody = '<tbody>'
-        for(var i = 0; i < data.ordersByBrand.length; i++){
-            tableBody += '<tr><td>'+ data.ordersByBrand[i].brandName +'</td><td>'+ data.ordersByBrand[i].quantityProducts +'</td><td>'+ formatNumber(data.ordersByBrand[i].price) +'</td></tr>';
-        }
-        tableBody += '</tbody>'
-        
-
-        
-        //console.log(tableHeader+tableBody);
-        $('#datatable-buttons_').html(tableHeader + tableBody);
-        
-        $("#datatable-buttons_").DataTable({}).destroy();
-
-        var handleDataTableButtons = function () {
-            if ($("#datatable-buttons_").length) {
-                $("#datatable-buttons_").DataTable({
-                    dom: "Blfrtip",
-                    buttons: [
-                        {
-                            extend: "copy",
-                            className: "btn-sm"
-                        },
-                        {
-                            extend: "csv",
-                            className: "btn-sm"
-                        },
-                        {
-                            extend: "excel",
-                            className: "btn-sm"
-                        },
-                        {
-                            extend: "pdfHtml5",
-                            className: "btn-sm"
-                        },
-                        {
-                            extend: "print",
-                            className: "btn-sm"
-                        },
-                    ],
-                    responsive: true
-                });
-            }
-        };
-    
-        TableManageButtons = function () {
-            "use strict";
-            return {
-                init: function () {
-                    handleDataTableButtons();
-                }
-            };
-        }();
-
-        
-        TableManageButtons.init();
-        
-    }
-    
 }
 
 function fillReporteSemanas(data){
