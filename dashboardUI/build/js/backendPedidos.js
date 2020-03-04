@@ -12,6 +12,7 @@ $(document).ready(function(){
 });
 
 function pickDateBackend(startdate, enddate, source){
+   
     
     var api_url = 'https://3x6w4x1m7e.execute-api.us-east-1.amazonaws.com/dev/servreportingdashboardorders'
     var params = [];
@@ -30,23 +31,36 @@ function pickDateBackend(startdate, enddate, source){
         
     }
     //console.log(JSON.stringify(params));
+    if (typeof NProgress != 'undefined') {
+        
+        NProgress.start();
+        
+    }
     $.ajax({
         
-        url: api_url,
-        method: "POST",
-        contentType: "application/json",
-        dataType: 'json',
-        data: JSON.stringify(params),
-        success: function(result){
-             data = JSON.parse(result.body);
-            //console.log(data); 
-            //console.log(data.ordersByStat.length);
-            //Tables
-            fillTables(data);
+    url: api_url,
+    method: "POST",
+    contentType: "application/json",
+    dataType: 'json',
+    data: JSON.stringify(params),
+    success: function(result){
+            data = JSON.parse(result.body);
+        //console.log(data); 
+        //console.log(data.ordersByStat.length);
+        //Tables
+        fillTables(data);
 
-            fillTablesCategorias(data);
-            
-            
+        fillTablesCategorias(data);
+        if (typeof NProgress != 'undefined') {
+    
+            NProgress.done();
+        }
+        },
+        error: function(result){
+            if (typeof NProgress != 'undefined') {
+        
+                NProgress.done();
+            }
         }
     })
 }

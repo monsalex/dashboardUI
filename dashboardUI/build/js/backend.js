@@ -1,7 +1,7 @@
 $(document).ready(function(){
     //init_chart_doughnut();
     var data;
-    console.log(data);
+    //console.log(data);
     pickDateBackend(moment().format("YYYY-MM-DD"), moment().format("YYYY-MM-DD"), 0);
 
     /*$(".iHiddeShow").click(function(){
@@ -10,6 +10,8 @@ $(document).ready(function(){
         $("#divBelow").toggle();
     });*/
 });
+
+
 
 function pickDateBackend(startdate, enddate, source){
     
@@ -30,6 +32,11 @@ function pickDateBackend(startdate, enddate, source){
         
     }
     //console.log(JSON.stringify(params));
+    if (typeof NProgress != 'undefined') {
+        
+        NProgress.start();
+        
+    }
     $.ajax({
         
         url: api_url,
@@ -39,7 +46,7 @@ function pickDateBackend(startdate, enddate, source){
         data: JSON.stringify(params),
         success: function(result){
              data = JSON.parse(result.body);
-            console.log(data); 
+            //console.log(data); 
             //console.log(data.ordersByStat.length);
 
             //Charts
@@ -76,6 +83,17 @@ function pickDateBackend(startdate, enddate, source){
             fillTazBines(data.ordersByPayBines);
 
             fillCash(data);
+
+            if (typeof NProgress != 'undefined') {
+        
+                NProgress.done();
+            }
+        },
+        error: function(result){
+            if (typeof NProgress != 'undefined') {
+        
+                NProgress.done();
+            }
         }
     })
 }
