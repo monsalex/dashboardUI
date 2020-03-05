@@ -1653,7 +1653,7 @@ function init_daterangepicker() {
     });
     $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
         console.log("apply event fired 1, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
-        pickDateBackend(picker.startDate, picker.endDate);
+        pickDateBackend(picker.startDate, picker.endDate, 1);
     });
     $('#reportrange').on('cancel.daterangepicker', function (ev, picker) {
         console.log("cancel event fired");

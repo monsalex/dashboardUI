@@ -22,7 +22,8 @@ function pickDateBackend(startdate, enddate, source){
             "fdFechaInit" : moment(startdate).format("YYYY-MM-DD") + " 00:00:00",
             "fdFechaFin" : moment(enddate).format("YYYY-MM-DD") + " 23:59:59",
         }
-        //console.log(params)
+        
+
     }
     else{
         params = {
@@ -30,6 +31,7 @@ function pickDateBackend(startdate, enddate, source){
             "fdFechaFin" : enddate + " 23:59:59",
         }
         
+
     }
     //console.log(JSON.stringify(params));
     if (typeof NProgress != 'undefined') {
@@ -37,6 +39,8 @@ function pickDateBackend(startdate, enddate, source){
         NProgress.start();
         
     }
+
+    //console.log(params)
     $.ajax({
         
         url: api_url,
@@ -711,7 +715,7 @@ function fillMontoStatus(data){
     var arrTotales = [];
     var conteo = 0;
     
-    if(data.amountByStat != 'undefined' && data.amountByStat != 'null'){
+    if(data.amountByStat){
         for(var i=0; i < data.amountByStat.length; i++){
             if(data.amountByStat[i].statusVtex == 'approve-payment' || data.amountByStat[i].statusVtex == 'cancel'
                 || data.amountByStat[i].statusVtex == 'canceled' || data.amountByStat[i].statusVtex == 'invoice'
