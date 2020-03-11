@@ -20,6 +20,7 @@
               function(err) { console.error("Error signing in", err); });
   }
   function loadClient() {
+    
     gapi.client.setApiKey("AIzaSyDiKmOq2EOKENRmhSFcgkV2V__4uT-atlQ");
     return gapi.client.load("https://content.googleapis.com/discovery/v1/apis/analyticsreporting/v4/rest")
         .then(function() { console.log("GAPI client loaded for API"); },
