@@ -14,92 +14,117 @@ $(document).ready(function(){
 
 
 function pickDateBackend(startdate, enddate, source){
-    
-    var api_url = 'https://3x6w4x1m7e.execute-api.us-east-1.amazonaws.com/dev/servreportingdashboardorders'
+    //console.log(window.location.pathname.split('/').pop());
     var params = [];
-    if(source == 1){
-        params = {
-            "fdFechaInit" : moment(startdate).format("YYYY-MM-DD") + " 00:00:00",
-            "fdFechaFin" : moment(enddate).format("YYYY-MM-DD") + " 23:59:59",
-        }
+    
+
+    if(window.location.pathname.split('/').pop() != 'Analytics.html'){
+        var api_url = 'https://3x6w4x1m7e.execute-api.us-east-1.amazonaws.com/dev/servreportingdashboardorders'
         
-
-    }
-    else{
-        params = {
-            "fdFechaInit" : startdate + " 00:00:00",
-            "fdFechaFin" : enddate + " 23:59:59",
-        }
-        
-
-    }
-    //console.log(JSON.stringify(params));
-    if (typeof NProgress != 'undefined') {
-        
-        NProgress.start();
-        
-    }
-
-    //console.log(params)
-    $.ajax({
-        
-        url: api_url,
-        method: "POST",
-        contentType: "application/json",
-        dataType: 'json',
-        data: JSON.stringify(params),
-        success: function(result){
-             data = JSON.parse(result.body);
-            //console.log(data); 
-            //console.log(data.ordersByStat.length);
-
-            //Charts
-
-            fillKPIs(data);
-            
-            //Charts
-
-            //Tables
-            //fillTables(data);
-            
-            //fillTablesCategorias(data.ordersByCategory);
-            
-            //Tables tiendas
-            fillTablesStore(data);
-
-            //Charts
-            fillCharts(data.ordersDateBefore, enddate);
-            //Charts
-
-            //TipoPago
-            fillTipoPago(data);
-            //TIpoPago
-
-            //Monto por status
-            fillMontoStatus(data);
-
-            //Monto por Semanas
-            fillReporteSemanas(data.amountByWeek);
-
-            //Ordenes por Semanas
-            fillReporteOrdenes(data.ordersByWeek);
-
-            fillTazBines(data.ordersByPayBines);
-
-            fillCash(data);
-
-            if (typeof NProgress != 'undefined') {
-        
-                NProgress.done();
+        if(source == 1){
+            params = {
+                "fdFechaInit" : moment(startdate).format("YYYY-MM-DD") + " 00:00:00",
+                "fdFechaFin" : moment(enddate).format("YYYY-MM-DD") + " 23:59:59"
             }
-        },
-        error: function(result){
-            if (typeof NProgress != 'undefined') {
-        
-                NProgress.done();
-            }
+            
+    
         }
-    })
+        else{
+            params = {
+                "fdFechaInit" : startdate + " 00:00:00",
+                "fdFechaFin" : enddate + " 23:59:59"
+            }
+            
+    
+        }
+        
+        //console.log(JSON.stringify(params));
+        if (typeof NProgress != 'undefined') {
+            
+            NProgress.start();
+            
+        }
+
+        //console.log(params)
+        $.ajax({
+            
+            url: api_url,
+            method: "POST",
+            contentType: "application/json",
+            dataType: 'json',
+            data: JSON.stringify(params),
+            success: function(result){
+                data = JSON.parse(result.body);
+                //console.log(data); 
+                //console.log(data.ordersByStat.length);
+
+                //Charts
+
+                fillKPIs(data);
+                
+                //Charts
+
+                //Tables
+                //fillTables(data);
+                
+                //fillTablesCategorias(data.ordersByCategory);
+                
+                //Tables tiendas
+                fillTablesStore(data);
+
+                //Charts
+                fillCharts(data.ordersDateBefore, enddate);
+                //Charts
+
+                //TipoPago
+                fillTipoPago(data);
+                //TIpoPago
+
+                //Monto por status
+                fillMontoStatus(data);
+
+                //Monto por Semanas
+                fillReporteSemanas(data.amountByWeek);
+
+                //Ordenes por Semanas
+                fillReporteOrdenes(data.ordersByWeek);
+
+                fillTazBines(data.ordersByPayBines);
+
+                fillCash(data);
+
+                if (typeof NProgress != 'undefined') {
+            
+                    NProgress.done();
+                }
+            },
+            error: function(result){
+                if (typeof NProgress != 'undefined') {
+            
+                    NProgress.done();
+                }
+            }
+        })
+    }else{
+        var paramDate
+        if(source == 1){
+            paramDate = {
+                "fdFechaInit" : moment(startdate).format("YYYY-MM-DD"),
+                "fdFechaFin" : moment(enddate).format("YYYY-MM-DD")
+            }
+            
+    
+        }
+        else{
+            paramDate = {
+                "fdFechaInit" : startdate,
+                "fdFechaFin" : enddate
+            }
+            
+    
+        }
+        getAanlyticsData(paramDate);
+    }
 }
 
 function fillCash(data){
