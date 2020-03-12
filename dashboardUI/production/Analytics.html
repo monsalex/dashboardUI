@@ -21,6 +21,9 @@
   <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <!-- NProgress -->
   <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+
+      <!-- bootstrap-progressbar -->
+      <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
   <!-- iCheck -->
   <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
   <!-- Datatables -->
@@ -217,7 +220,62 @@
           </div>
           <div class="clearfix"></div>
           <div class="row">
-
+            <div class="col-md-4 col-sm-6 ">
+              <div class="x_panel ">
+                <div class="x_title">
+                  <h2>Sesiones<small></small></h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                   
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <h4>Origen</h4>
+                  <div id="divSessions">
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-6 ">
+              <div class="x_panel ">
+                <div class="x_title">
+                  <h2>Transacciones<small></small></h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                   
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <h4>Origen</h4>
+                  
+                  <div id="divTransactions"></div>
+                  
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-6 ">
+              <div class="x_panel ">
+                <div class="x_title">
+                  <h2>Tasa de Conversión<small></small></h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                   
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <h4>Origen</h4>
+               
+                  <div id="divConversionRate"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -263,6 +321,10 @@
   <!-- bootstrap-daterangepicker -->
   <script src="../vendors/moment/min/moment.min.js"></script>
   <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+  <!-- bootstrap-progressbar -->
+  <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+
   <!-- Custom Theme Scripts -->
   <script src="../build/js/custom.min.js"></script>
 
