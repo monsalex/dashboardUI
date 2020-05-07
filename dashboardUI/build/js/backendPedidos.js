@@ -14,7 +14,7 @@ $(document).ready(function(){
 function pickDateBackend(startdate, enddate, source){
    
     
-    var api_url = 'https://3x6w4x1m7e.execute-api.us-east-1.amazonaws.com/dev/servreportingdashboardorders'
+    var api_url = 'https://in3xd5259i.execute-api.us-east-1.amazonaws.com/prod/servreportingdashboardorders'
     var params = [];
     if(source == 1){
         params = {
