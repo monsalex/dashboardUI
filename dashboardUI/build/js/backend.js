@@ -45,7 +45,7 @@ function pickDateBackend(startdate, enddate, source){
             
         }
 
-        console.log(api_url)
+        //console.log(api_url)
         $.ajax({
             
             url: api_url,
