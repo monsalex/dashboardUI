@@ -19,7 +19,7 @@ function pickDateBackend(startdate, enddate, source){
     
 
     if(window.location.pathname.split('/').pop() != 'Analytics.html'){
-        var api_url = 'https://in3xd5259i.execute-api.us-east-1.amazonaws.com/prod/servreportingdashboardorders'
+        var api_url = 'https://api.integracionektgt.com/rep-prod-v1/dashboard/orders'
         
         if(source == 1){
             params = {
@@ -45,10 +45,14 @@ function pickDateBackend(startdate, enddate, source){
             
         }
 
-        //console.log(params)
+        console.log(api_url)
         $.ajax({
             
             url: api_url,
+            headers: { 
+                'x-api-key' : '5OoJZQQzO7aUJ17qFRoKZ9iTuKL6PU9NDlTU9wsa',
+                'Content-Type' : 'application/json'
+            },
             method: "POST",
             contentType: "application/json",
             dataType: 'json',
@@ -59,15 +63,7 @@ function pickDateBackend(startdate, enddate, source){
                 //console.log(data.ordersByStat.length);
 
                 //Charts
-
                 fillKPIs(data);
-                
-                //Charts
-
-                //Tables
-                //fillTables(data);
-                
-                //fillTablesCategorias(data.ordersByCategory);
                 
                 //Tables tiendas
                 fillTablesStore(data);
@@ -78,7 +74,6 @@ function pickDateBackend(startdate, enddate, source){
 
                 //TipoPago
                 fillTipoPago(data);
-                //TIpoPago
 
                 //Monto por status
                 fillMontoStatus(data);
@@ -103,6 +98,7 @@ function pickDateBackend(startdate, enddate, source){
             
                     NProgress.done();
                 }
+                //console.log(result);
             }
         })
     }else{
