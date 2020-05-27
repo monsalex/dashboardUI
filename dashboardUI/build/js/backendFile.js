@@ -32,7 +32,6 @@ $('#btnSubir').click(function(e){
             
       url: api_url,
       headers: { 
-          'x-api-key' : '5OoJZQQzO7aUJ17qFRoKZ9iTuKL6PU9NDlTU9wsa',
           'Content-Type' : 'application/csv'
 
       },
