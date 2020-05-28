@@ -1,9 +1,12 @@
 $(document).ready(function(){
   $('#exampleFormControlFile1').val('');
+  $("#btnCancel").hide();
+  $('#btnSubir').hide();
 });
 
 $('#btnCaracteristicas').click(function(e){
     e.preventDefault();  //stop the browser from following
+    $('#exampleFormControlFile1').val('');
     window.location.href = "https://3mjm5v2pt5.execute-api.us-east-1.amazonaws.com/production/elektra/guatemala/actualizacionmasiva/descargararchivo";
     
 });
@@ -14,18 +17,56 @@ $('#btnEspecificaciones').click(function(e){
     
 });
 
+var filebase64 = '';
+var fileName;
+$(function () {
+        
+        $("input[type=file]").change(function (e) {
+            var file = e.target.files[0];
+            fileName = e.target.files[0].name;
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                //$('#hfBase64').val(e.target.result);
+                filebase64 = e.target.result;
+                //alert(filebase64);
+            }
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+
+            $("#btnCancel").show();
+            $('#btnSubir').show();
+        });
+      });
+
+$("#btnCancel").click(function(e){
+  $('#exampleFormControlFile1').val('');
+  $("#btnCancel").hide();
+  $('#btnSubir').hide();
+});
+
 $('#btnSubir').click(function(e){
 
-  var file = $("#exampleFormControlFile1").get(0).files;
 
   if($('#exampleFormControlFile1').val() != ''){
-    var varFile = $("#exampleFormControlFile1").get(0).files;
+
+    var obj = {};
+    obj.data = filebase64;
+    obj.name = fileName;
+
     var fd = new FormData();
     var files = $('#exampleFormControlFile1')[0].files[0];
     fd.append('file',files);
 
-    console.log(varFile);
-    
+    //console.log($('#exampleFormControlFile1')[0].files[0]);
+    //console.log(files.name);
+
+    if (typeof NProgress != 'undefined') {
+            
+      NProgress.start();
+      
+  }
+
     var api_url = 'https://oa96bjf838.execute-api.us-east-1.amazonaws.com/production/elektra/guatemala/actualizacionmasiva/subirarchivo';
 
     $.ajax({
@@ -33,27 +74,47 @@ $('#btnSubir').click(function(e){
       url: api_url,
       headers: { 
           'Content-Type' : 'application/csv'
-
       },
       type: "POST",
+      //data: filebase64,
+      data: files,
+      //contentType: 'text/csv;base64',
       contentType: false,
       processData: false,
-      data: fd,
       success: function(result){
           
 
           if (typeof NProgress != 'undefined') {
       
               NProgress.done();
+              $('#exampleFormControlFile1').val('');
+              $("#btnCancel").hide();
+              $('#btnSubir').hide();
           }
-          console.log("success: " + result.body);
+          //console.log(result);
+          new PNotify({
+            title: 'Actualizado',
+            text: '¡Se subió el archivo y se actualizaron los registros!',
+            type: 'success',
+            styling: 'bootstrap3'
+        });
+
       },
       error: function(result){
           if (typeof NProgress != 'undefined') {
       
               NProgress.done();
+              $('#exampleFormControlFile1').val('');
+              $("#btnCancel").hide();
+              $('#btnSubir').hide();
           }
           console.log("error: " + result);
+          new PNotify({
+            title: '¡Oh No!',
+            text: 'Algo terrible suciedió.',
+            type: 'error',
+            styling: 'bootstrap3'
+        });
       }
   })
 
@@ -61,24 +122,3 @@ $('#btnSubir').click(function(e){
   
   
 });
-
-var dropzone = Dropzone.options.myAwesomeDropzone = {
-    init: function() {
-        this.on("addedfile", function(file) { alert("Added file."); });
-      },
-      url: '../../files/IN/',
-      method: 'POST',
-      autoProcessQueue: false,
-      uploadMultiple: false,
-      parallelUploads: 1,
-      maxFiles: 1,
-      addRemoveLinks: true,
-    paramName: "file", // The name that will be used to transfer the file
-    maxFilesize: 2, // MB
-    accept: function(file, done) {
-      if (file.name == "justinbieber.jpg") {
-        done("Naha, you don't.");
-      }
-      else { done(); }
-    }
-  };
