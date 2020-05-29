@@ -2,6 +2,11 @@ $(document).ready(function(){
   $('#exampleFormControlFile1').val('');
   $("#btnCancel").hide();
   $('#btnSubir').hide();
+
+  $('#exampleFormControlFileSpecs').val('');
+  $("#btnCancelSpecs").hide();
+  $('#btnSubirSpecs').hide();
+
 });
 
 $('#btnCaracteristicas').click(function(e){
@@ -13,7 +18,7 @@ $('#btnCaracteristicas').click(function(e){
 
 $('#btnEspecificaciones').click(function(e){
     e.preventDefault();  //stop the browser from following
-    window.location.href = "../../files/OUT/Especificaciones.csv";
+    window.location.href = "https://wujyr09ny8.execute-api.us-east-1.amazonaws.com/production/elektra/guatemala/specification/downloadfile";
     
 });
 
@@ -36,6 +41,8 @@ $(function () {
 
             $("#btnCancel").show();
             $('#btnSubir').show();
+            $("#btnCancelSpecs").show();
+            $('#btnSubirSpecs').show();
         });
       });
 
@@ -45,29 +52,43 @@ $("#btnCancel").click(function(e){
   $('#btnSubir').hide();
 });
 
+$("#btnCancelSpecs").click(function(e){
+  $('#exampleFormControlFileSpecs').val('');
+  $("#btnCancelSpecs").hide();
+  $('#btnSubirSpecs').hide();
+});
+
+
 $('#btnSubir').click(function(e){
 
+  var api_url = 'https://oa96bjf838.execute-api.us-east-1.amazonaws.com/production/elektra/guatemala/actualizacionmasiva/subirarchivo';
+  
+  var objfile  = $('#exampleFormControlFile1');
+  UploadFile(objfile, api_url);
+});
 
-  if($('#exampleFormControlFile1').val() != ''){
+$('#btnSubirSpecs').click(function(e){
 
-    var obj = {};
-    obj.data = filebase64;
-    obj.name = fileName;
+  var api_url = 'https://cggn7442a7.execute-api.us-east-1.amazonaws.com/production/elektra/guatemala/specification/uploadfile';
+  var objfile  = $('#exampleFormControlFileSpecs');
+  UploadFile(objfile, api_url);
+  
+});
 
-    var fd = new FormData();
-    var files = $('#exampleFormControlFile1')[0].files[0];
-    fd.append('file',files);
+function UploadFile(objfile, api_url){
+  //console.log(objfile);
+  //console.log(api_url);
+  if(objfile.val() != ''){
 
-    //console.log($('#exampleFormControlFile1')[0].files[0]);
-    //console.log(files.name);
+    var files = objfile[0].files[0];
 
     if (typeof NProgress != 'undefined') {
             
       NProgress.start();
       
-  }
+    }
 
-    var api_url = 'https://oa96bjf838.execute-api.us-east-1.amazonaws.com/production/elektra/guatemala/actualizacionmasiva/subirarchivo';
+    
 
     $.ajax({
             
@@ -88,8 +109,12 @@ $('#btnSubir').click(function(e){
       
               NProgress.done();
               $('#exampleFormControlFile1').val('');
+              $('#exampleFormControlFileSpecs').val('');
+
               $("#btnCancel").hide();
               $('#btnSubir').hide();
+              $("#btnCancelSpecs").hide();
+              $('#btnSubirSpecs').hide();
           }
           //console.log(result);
           new PNotify({
@@ -105,8 +130,11 @@ $('#btnSubir').click(function(e){
       
               NProgress.done();
               $('#exampleFormControlFile1').val('');
+              $('#exampleFormControlFileSpecs').val('');
               $("#btnCancel").hide();
               $('#btnSubir').hide();
+              $("#btnCancelSpecs").hide();
+              $('#btnSubirSpecs').hide();
           }
           console.log("error: " + result);
           new PNotify({
@@ -119,6 +147,4 @@ $('#btnSubir').click(function(e){
   })
 
   }
-  
-  
-});
+}

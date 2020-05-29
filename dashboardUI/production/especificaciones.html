@@ -16,8 +16,11 @@
     <!-- NProgress -->
     <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
 
-    <!-- Dropzone.js -->
-    <link href="../vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
+    <!-- PNotify -->
+    <link href="../vendors/pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="../vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="../vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+    
 
     <!-- Custom Theme Style -->
     <link href="../build/css/custom.min.css" rel="stylesheet">
@@ -268,6 +271,33 @@
                 </div>
               </div>
             </div>
+            <div class="clearfix"></div>
+            <div class="row">
+              <div class="col-md-12 col-sm-12">
+                  <div class="x_panel">
+                    <div class="x_title">
+                      <h2></h2>
+                    </div>
+                    <div class="x_content">
+                      <div class="row">
+                        <form method="POST" id="idFormCSV" action="">
+                          <div class="form-group">
+                            
+                            <h2><label for="exampleFormControlFile1">Archivo para actualizar especificaciones</label></h2>
+                            <input type="file" class="form-control-file" id="exampleFormControlFileSpecs" accept=".csv">
+                          </div>
+                        </form>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6 col-sm-6 offset-md-3">
+                          <button id="btnSubirSpecs" class="btn btn-success btn-lg" type="button" style="width: 120px;">Subir <i class="fa fa-upload"></i></button>
+                          <button id="btnCancelSpecs" class="btn btn-danger btn-lg" type="button" style="width: 120px;">Cancelar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
           </div>
         </div>
         <!-- /page content -->
@@ -292,9 +322,10 @@
     <!-- NProgress -->
     <script src="../vendors/nprogress/nprogress.js"></script>
 
-    <!-- Dropzone.js -->
-    <script src="../vendors/dropzone/dist/min/dropzone.min.js"></script>
-    
+ <!-- PNotify -->
+ <script src="../vendors/pnotify/dist/pnotify.js"></script>
+ <script src="../vendors/pnotify/dist/pnotify.buttons.js"></script>
+ <script src="../vendors/pnotify/dist/pnotify.nonblock.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
 
