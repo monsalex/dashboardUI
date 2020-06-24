@@ -4,11 +4,6 @@ $(document).ready(function(){
     //console.log(data);
     pickDateBackend(moment().format("YYYY-MM-DD"), moment().format("YYYY-MM-DD"), 0);
 
-    /*$(".iHiddeShow").click(function(){
-        $(this).toggleClass("fa-plus-circle fa-close");
-        
-        $("#divBelow").toggle();
-    });*/
 });
 
 
@@ -19,7 +14,7 @@ function pickDateBackend(startdate, enddate, source){
     
 
     if(window.location.pathname.split('/').pop() != 'Analytics.html'){
-        var api_url = 'https://3x6w4x1m7e.execute-api.us-east-1.amazonaws.com/dev/servreportingdashboardorders'
+        var api_url = 'https://api.integracionektgt.com/rep-prod-v1/dashboard/orders'
         
         if(source == 1){
             params = {
@@ -45,10 +40,14 @@ function pickDateBackend(startdate, enddate, source){
             
         }
 
-        //console.log(params)
+        //console.log(api_url)
         $.ajax({
             
             url: api_url,
+            headers: { 
+                'x-api-key' : '5OoJZQQzO7aUJ17qFRoKZ9iTuKL6PU9NDlTU9wsa',
+                'Content-Type' : 'application/json'
+            },
             method: "POST",
             contentType: "application/json",
             dataType: 'json',
@@ -59,15 +58,7 @@ function pickDateBackend(startdate, enddate, source){
                 //console.log(data.ordersByStat.length);
 
                 //Charts
-
                 fillKPIs(data);
-                
-                //Charts
-
-                //Tables
-                //fillTables(data);
-                
-                //fillTablesCategorias(data.ordersByCategory);
                 
                 //Tables tiendas
                 fillTablesStore(data);
@@ -78,7 +69,6 @@ function pickDateBackend(startdate, enddate, source){
 
                 //TipoPago
                 fillTipoPago(data);
-                //TIpoPago
 
                 //Monto por status
                 fillMontoStatus(data);
@@ -103,6 +93,7 @@ function pickDateBackend(startdate, enddate, source){
             
                     NProgress.done();
                 }
+                //console.log(result);
             }
         })
     }else{
@@ -504,7 +495,15 @@ function fillKPIs(data){
             var nopagadas = 0;
             for(var i = 0; i < data.ordersByStat.length; i++){
             //if(data.ordersByStat[1] != null)
-                if(data.ordersByStat[i].statusVtex == 'invoice' || data.ordersByStat[i].statusVtex == 'invoiced'){
+
+                if(data.ordersByStat[i].statusVtex == 'invoice' || data.ordersByStat[i].statusVtex == 'invoiced'
+                || data.ordersByStat[i].statusVtex == 'ready-for-handling' || data.ordersByStat[i].statusVtex == 'start-handling'
+                || data.ordersByStat[i].statusVtex == 'handling' || data.ordersByStat[i].statusVtex == 'approve-payment'
+                || data.ordersByStat[i].statusVtex == 'payment-approved' || data.ordersByStat[i].statusVtex == 'request-cancel'
+                || data.ordersByStat[i].statusVtex == 'waiting-for-seller-decision' || data.ordersByStat[i].statusVtex == 'authorize-fulfillment'
+                || data.ordersByStat[i].statusVtex == 'invoice-after-cancellation-deny' || data.ordersByStat[i].statusVtex == 'replaced'
+                || data.ordersByStat[i].statusVtex == 'cancellation-requested' || data.ordersByStat[i].statusVtex == 'window-to-cancel'
+                ){
                     pagadas += data.ordersByStat[i].ordersNumber;
                 }
 
@@ -524,21 +523,38 @@ function fillKPIs(data){
     
     if(data.amounProdByStat != 'undefined' && data.amounProdByStat != null){
         if(data.amounProdByStat.length >0){
-            if(data.amounProdByStat[0].invoicedProducts != null)
-                if(data.amounProdByStat[0].invoicedProducts > 0){
-                    var unidades = new Intl.NumberFormat('en-US').format(data.amounProdByStat[0].invoicedProducts);
-                    var monto = data.amounProdByStat[0].amountInvoiced;
+            
+
+            var dataM = data.amounProdByStat;
+            var monto = 0;
+            var unidades = 0;
+             dataM.forEach(element =>{
+                //console.log(element.Status);
+                if(element.Status == 'invoice' || element.Status == 'invoiced'
+                || element.Status == 'ready-for-handling' || element.Status == 'start-handling'
+                || element.Status == 'handling' || element.Status == 'approve-payment'
+                || element.Status == 'payment-approved' || element.Status == 'request-cancel'
+                || element.Status == 'waiting-for-seller-decision' || element.Status == 'authorize-fulfillment'
+                || element.Status == 'invoice-after-cancellation-deny' || element.Status == 'replaced'
+                || element.Status == 'cancellation-requested' || element.Status == 'window-to-cancel'
+                ){
+                    monto += parseInt(element.amountInvoiced);
+                    unidades += parseInt(element.invoicedProducts);
                     
-                    var neew = formatNumber(monto);
-                    $("#VentasUnidades").html(unidades);
-                    $("#VentasMonto").html(neew);
                 }
+
+             });
+             
+             var neew = formatNumber(monto);
+            $("#VentasUnidades").html(new Intl.NumberFormat('en-US').format(unidades));
+            $("#VentasMonto").html(neew);
+           
         }
     }
 }
 
 function fillCharts(data, enddate){
-
+    //console.log(data);
     var arrPagadas = [];
     var arrNoPagadas = [];
     var arrCanceladas = [];
@@ -746,7 +762,12 @@ function fillMontoStatus(data){
                 || data.amountByStat[i].statusVtex == 'canceled' || data.amountByStat[i].statusVtex == 'invoice'
                 || data.amountByStat[i].statusVtex == 'invoiced' || data.amountByStat[i].statusVtex == 'order-created'
                 || data.amountByStat[i].statusVtex == 'ready-for-handling' || data.amountByStat[i].statusVtex == 'start-handling'
-                || data.amountByStat[i].statusVtex == 'handling' || data.amountByStat[i].statusVtex == 'payment-pending'){
+                || data.amountByStat[i].statusVtex == 'handling' || data.amountByStat[i].statusVtex == 'payment-pending'
+                || data.amountByStat[i].statusVtex == 'payment-approved' || data.amountByStat[i].statusVtex == 'request-cancel'
+                || data.amountByStat[i].statusVtex == 'waiting-for-seller-decision' || data.amountByStat[i].statusVtex == 'authorize-fulfillment'
+                || data.amountByStat[i].statusVtex == 'invoice-after-cancellation-deny' || data.amountByStat[i].statusVtex == 'replaced'
+                || data.amountByStat[i].statusVtex == 'cancellation-requested' || data.amountByStat[i].statusVtex == 'window-to-cancel'
+                ){
                     montoTotal += Number(data.amountByStat[i].amounSatus);
                     
                     
@@ -767,7 +788,12 @@ function fillMontoStatus(data){
                         arrAmountHandling.push(data.amountByStat[i].amounSatus);
                     }
 
-                    if(data.amountByStat[i].statusVtex == 'approve-payment'){
+                    if(data.amountByStat[i].statusVtex == 'approve-payment' || data.amountByStat[i].statusVtex == 'payment-approved' 
+                    || data.amountByStat[i].statusVtex == 'request-cancel'
+                    || data.amountByStat[i].statusVtex == 'waiting-for-seller-decision' || data.amountByStat[i].statusVtex == 'authorize-fulfillment'
+                    || data.amountByStat[i].statusVtex == 'invoice-after-cancellation-deny' || data.amountByStat[i].statusVtex == 'replaced'
+                    || data.amountByStat[i].statusVtex == 'cancellation-requested' || data.amountByStat[i].statusVtex == 'window-to-cancel'
+                    ){
                         arrAmountApprove.push(data.amountByStat[i].amounSatus);
                     }
 
@@ -872,7 +898,12 @@ function fillMontoStatus(data){
             || data.ordersByStat[i].statusVtex == 'canceled' || data.ordersByStat[i].statusVtex == 'invoice'
             || data.ordersByStat[i].statusVtex == 'invoiced' || data.ordersByStat[i].statusVtex == 'order-created'
             || data.ordersByStat[i].statusVtex == 'ready-for-handling' || data.ordersByStat[i].statusVtex == 'start-handling'
-            || data.ordersByStat[i].statusVtex == 'handling' || data.ordersByStat[i].statusVtex == 'payment-pending'){
+            || data.ordersByStat[i].statusVtex == 'handling' || data.ordersByStat[i].statusVtex == 'payment-pending'
+            || data.ordersByStat[i].statusVtex == 'payment-approved' || data.ordersByStat[i].statusVtex == 'request-cancel'
+            || data.ordersByStat[i].statusVtex == 'waiting-for-seller-decision' || data.ordersByStat[i].statusVtex == 'authorize-fulfillment'
+            || data.ordersByStat[i].statusVtex == 'invoice-after-cancellation-deny' || data.ordersByStat[i].statusVtex == 'replaced'
+            || data.ordersByStat[i].statusVtex == 'cancellation-requested' || data.ordersByStat[i].statusVtex == 'window-to-cancel'
+            ){
                     
                     
                     ordersTotal += Number(data.ordersByStat[i].ordersNumber);
@@ -895,7 +926,12 @@ function fillMontoStatus(data){
                         arrAmountHandling.push(data.ordersByStat[i].ordersNumber);
                     }
 
-                    if(data.ordersByStat[i].statusVtex == 'approve-payment'){
+                    if(data.ordersByStat[i].statusVtex == 'approve-payment' || data.ordersByStat[i].statusVtex == 'payment-approved' 
+                    || data.ordersByStat[i].statusVtex == 'request-cancel'
+                    || data.ordersByStat[i].statusVtex == 'waiting-for-seller-decision' || data.ordersByStat[i].statusVtex == 'authorize-fulfillment'
+                    || data.ordersByStat[i].statusVtex == 'invoice-after-cancellation-deny' || data.ordersByStat[i].statusVtex == 'replaced'
+                    || data.ordersByStat[i].statusVtex == 'cancellation-requested' || data.ordersByStat[i].statusVtex == 'window-to-cancel'
+                    ){
                         arrAmountApprove.push(data.ordersByStat[i].ordersNumber);
                     }
 

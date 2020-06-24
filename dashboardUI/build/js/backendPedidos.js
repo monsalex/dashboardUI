@@ -14,7 +14,7 @@ $(document).ready(function(){
 function pickDateBackend(startdate, enddate, source){
    
     
-    var api_url = 'https://3x6w4x1m7e.execute-api.us-east-1.amazonaws.com/dev/servreportingdashboardorders'
+    var api_url = 'https://api.integracionektgt.com/rep-prod-v1/dashboard/orders'
     var params = [];
     if(source == 1){
         params = {
@@ -42,6 +42,7 @@ function pickDateBackend(startdate, enddate, source){
     method: "POST",
     contentType: "application/json",
     dataType: 'json',
+    headers: { "x-api-key": "5OoJZQQzO7aUJ17qFRoKZ9iTuKL6PU9NDlTU9wsa" },
     data: JSON.stringify(params),
     success: function(result){
             data = JSON.parse(result.body);
